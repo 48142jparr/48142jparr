@@ -6,20 +6,3 @@
 
 # Dependencies
 node_modules/
-
-# Databases and tokens
-*.db
-tokens*.json
-
-# VSCode
-.vscode/
-
-# Logs
-*.log
-npm-debug.log
-
-# macOS
-.DS_Store
-
-# Local tunnel url
-localtunnel-url.txt
