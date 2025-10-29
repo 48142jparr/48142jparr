@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>All Phone Numbers</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; background: #f9f9f9; }
+    h1 { color: #2c3e50; }
+    #fetch-btn { padding: 10px 20px; font-size: 1em; margin-bottom: 1em; }
+    table { border-collapse: collapse; width: 100%; background: #fff; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    tr:nth-child(even) { background: #f6f6f6; }
+  </style>
+</head>
+<body>
+  <h1>All Phone Numbers</h1>
+  <button id="fetch-btn">Fetch Phone Numbers</button>
+  <table id="numbers-table">
+    <thead>
+      <tr><th>#</th><th>Phone Number</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    document.getElementById('fetch-btn').onclick = function() {
+      fetch('/fetch-phone-numbers')
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector('#numbers-table tbody');
+          tbody.innerHTML = '';
+          (data.phoneNumbers || []).forEach((num, idx) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${idx + 1}</td><td>${num}</td>`;
+            tbody.appendChild(tr);
+          });
+        })
+        .catch(err => {
+          alert('Failed to fetch phone numbers.');
+        });
+    };
+  </script>
+</body>
+</html>

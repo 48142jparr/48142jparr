@@ -1,0 +1,5 @@
+# LocalTunnel public URL for GoTo Connect HTTP Notify
+
+https://orange-seas-rest.loca.lt/notify
+
+Use this URL in your GoTo Connect dial plan HTTP Notify node configuration.

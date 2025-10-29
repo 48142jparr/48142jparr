@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GoTo Phone Number Report</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 32px; }
+    h1 { color: #007bff; margin-bottom: 24px; }
+    label { font-weight: 500; margin-top: 16px; display: block; }
+    input, select { padding: 8px; margin-top: 4px; width: 100%; border-radius: 4px; border: 1px solid #ccc; }
+    button { background: #007bff; color: #fff; border: none; border-radius: 4px; padding: 10px 24px; font-size: 16px; cursor: pointer; margin-top: 24px; }
+    button:disabled { background: #aaa; }
+    .debug { background: #e9ecef; padding: 12px; border-radius: 4px; margin-top: 18px; font-size: 14px; color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+    th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+    th { background: #f1f3f6; }
+    .alert { background: #ffe5e5; color: #b30000; padding: 12px; border-radius: 4px; margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>GoTo Phone Number Report</h1>
+    <label for="accessToken">Access Token</label>
+    <input type="text" id="accessToken" placeholder="Paste your OAuth access token here">
+    <label for="organizationId">Organization ID</label>
+    <input type="text" id="organizationId" placeholder="Organization ID">
+    <label for="accountKey">Account Key (optional)</label>
+    <input type="text" id="accountKey" placeholder="Account Key">
+    <label for="phoneNumber">Phone Number</label>
+    <select id="phoneNumber"></select>
+    <button id="fetchBtn">Fetch Phone Number</button>
+    <div class="debug" id="debugWindow"></div>
+    <div id="results"></div>
+  </div>
+  <script>
+    async function fetchScimAccounts(){
+      try {
+        const resp = await fetch('/list-scim-accounts');
+        if (!resp.ok) return [];
+        const j = await resp.json();
+        return j.accounts || [];
+      } catch (e) { return []; }
+    }
+
+    async function populateAccountsSelector(){
+      const accounts = await fetchScimAccounts();
+      // Try to find existing input or select element for accountKey
+      let existing = document.getElementById('accountKey') || document.getElementById('accountKeySelect');
+      const container = document.querySelector('.container') || document.body;
+      // Helper to create and populate a select element
+      function makeSelect(){
+        const newSel = document.createElement('select');
+        newSel.id = 'accountKeySelect';
+        newSel.style.width = '100%';
+        newSel.style.marginTop = '4px';
+        accounts.forEach(a => {
+          const opt = document.createElement('option');
+          opt.value = a.value;
+          opt.textContent = (a.display || a.value) + (a.entitlements && a.entitlements.length ? ' [' + a.entitlements.join(',') + ']' : '');
+          newSel.appendChild(opt);
+        });
+        return newSel;
+      }
+
+      if (!existing) {
+        // No existing field found — insert new select after the accountKey label if possible
+        const label = document.querySelector('label[for="accountKey"]');
+        const parent = label ? label.parentElement : container;
+        const sel = makeSelect();
+        if (label && label.nextSibling) parent.insertBefore(sel, label.nextSibling);
+        else parent.appendChild(sel);
+        return;
+      }
+
+      // If existing is an input, replace it with a select
+      if (existing.tagName === 'INPUT') {
+        const parent = existing.parentElement || container;
+        const sel = makeSelect();
+        parent.replaceChild(sel, existing);
+        return;
+      }
+
+      // If existing is a select, just repopulate it
+      if (existing.tagName === 'SELECT') {
+        existing.innerHTML = '';
+        accounts.forEach(a => {
+          const opt = document.createElement('option');
+          opt.value = a.value;
+          opt.textContent = (a.display || a.value) + (a.entitlements && a.entitlements.length ? ' [' + a.entitlements.join(',') + ']' : '');
+          existing.appendChild(opt);
+        });
+        return;
+      }
+    }
+
+    async function prepopulate(){
+      try {
+        // token + org
+        const [tokenResp, envResp] = await Promise.all([fetch('/api/latest-access-token'), fetch('/api/env-vars')]);
+        const tokenData = await tokenResp.json();
+        const envData = await envResp.json();
+        if (tokenData.accessToken) document.getElementById('accessToken').value = tokenData.accessToken;
+        if (envData.organizationId) document.getElementById('organizationId').value = envData.organizationId;
+        // DO NOT repopulate accounts here (avoids resetting user's selection)
+
+        // determine account key to use (if selector exists use its current value)
+        const accountSel = document.getElementById('accountKeySelect');
+        const accountKeyToUse = accountSel ? accountSel.value : (document.getElementById('accountKey') ? document.getElementById('accountKey').value : '');
+        await fetchAndFillNumbers(accountKeyToUse);
+      } catch (err) {
+        document.getElementById('debugWindow').textContent = 'Error prepopulating: ' + err.message;
+      }
+    }
+
+    // New helper: fetch numbers and fill dropdown — does not touch accounts selector
+    async function fetchAndFillNumbers(accountKeyToUse){
+      try {
+        const url = accountKeyToUse ? `/phone-numbers-summary?accountKey=${encodeURIComponent(accountKeyToUse)}` : '/phone-numbers-summary';
+        const phoneResp = await fetch(url);
+        if (!phoneResp.ok) { document.getElementById('debugWindow').textContent = 'Failed to load phone numbers: ' + phoneResp.status; return; }
+        const payload = await phoneResp.json();
+        const numbers = payload.phoneNumbers || payload || [];
+        const phoneSelect = document.getElementById('phoneNumber');
+        phoneSelect.innerHTML = '';
+        numbers.forEach(n => {
+          const option = document.createElement('option');
+          const numVal = n.phoneNumber || n.number || '';
+          option.value = numVal;
+          option.textContent = numVal + (n.callerId ? ' (' + n.callerId + ')' : '');
+          phoneSelect.appendChild(option);
+        });
+        // display account used
+        const acctInfo = payload.accountDisplay || payload.accountKey || (accountKeyToUse || '');
+        document.getElementById('debugWindow').textContent = `Loaded ${numbers.length} numbers for account: ${acctInfo} (source: ${payload.source || 'unknown'})`;
+      } catch (err) {
+        document.getElementById('debugWindow').textContent = 'Error loading numbers: ' + err.message;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async ()=>{
+      // populate accounts once, then prepopulate numbers
+      await populateAccountsSelector();
+      await prepopulate();
+    });
+
+    document.getElementById('fetchBtn').addEventListener('click', async ()=>{
+      // read current selection and fetch numbers only (do not repopulate accounts)
+      const accountSel = document.getElementById('accountKeySelect');
+      const accountKeyToUse = accountSel ? accountSel.value : (document.getElementById('accountKey') ? document.getElementById('accountKey').value : '');
+      document.getElementById('fetchBtn').disabled = true;
+      document.getElementById('fetchBtn').textContent = 'Loading...';
+      await fetchAndFillNumbers(accountKeyToUse);
+      document.getElementById('fetchBtn').disabled = false;
+      document.getElementById('fetchBtn').textContent = 'Fetch Phone Number';
+    });
+  </script>
+</body>
+</html>

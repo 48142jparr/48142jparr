@@ -1,0 +1,181 @@
+<!--
+Ext.html - GoTo Connect Extension Report
+Modern UI and reporting structure inspired by UReport.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoTo Connect Extension Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 1400px; margin: 0 auto; padding: 20px; background-color: #f8f9fa; }
+        .header { background: linear-gradient(135deg, #007bff, #0056b3); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .config-section { background: #ffffff; padding: 25px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-section { margin-bottom: 25px; padding: 20px; border: 1px solid #dee2e6; border-radius: 5px; background: #f8f9fa; }
+        .form-section h3 { margin-top: 0; color: #495057; border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #495057; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 14px; margin-bottom: 10px; }
+        button { background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        .alert { padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid transparent; }
+        .alert-error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .card { background: white; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .card h4 { margin: 0 0 10px 0; color: #007bff; font-size: 14px; }
+        .card .value { font-size: 24px; font-weight: bold; color: #28a745; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; border: 1px solid #dee2e6; }
+        th { background-color: #f1f1f1; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GoTo Connect Extension Report</h1>
+        <p>Shows all data for selected extension from GoTo Voicemail Messages API.</p>
+    </div>
+    <div class="config-section">
+        <form id="extForm">
+            <div class="form-section">
+                <h3>🔑 Authentication</h3>
+                <div class="form-group">
+                    <label for="orgId">Organizational ID</label>
+                    <input type="text" id="orgId" name="orgId" required>
+                </div>
+                <div class="form-group">
+                    <label for="extensionNumber">Extension Number</label>
+                    <select id="extensionNumber" name="extensionNumber">
+                        <option value="8880">8880</option>
+                    </select>
+                </div>
+                <button type="button" class="btn" id="fetchAccountKeyBtn">Fetch Extension Report</button>
+            </div>
+        </form>
+    </div>
+    <div id="results">
+        <div id="errorMsg" class="alert alert-error" style="display:none;"></div>
+        <div class="summary-cards" id="summaryCards" style="display:none;"></div>
+    </div>
+    <script>
+    let accessToken = '';
+    async function populateExtensionDropdown() {
+        const orgId = document.getElementById('orgId').value.trim();
+        // Wait for accessToken to be set by prepopulateFields
+        let tries = 0;
+        while (!accessToken && tries < 10) {
+            await new Promise(r => setTimeout(r, 200));
+            tries++;
+        }
+        if (!accessToken || !orgId) return;
+        try {
+            const res = await fetch(`/api/extensions-list?accessToken=${encodeURIComponent(accessToken)}&organizationId=${encodeURIComponent(orgId)}`);
+            const data = await res.json();
+            const select = document.getElementById('extensionNumber');
+            select.innerHTML = '';
+            if (Array.isArray(data.extensions) && data.extensions.length > 0) {
+                data.extensions.forEach(ext => {
+                    const opt = document.createElement('option');
+                    opt.value = ext.extensionNumber;
+                    opt.textContent = (ext.extensionName && ext.extensionName.trim()) ? `${ext.extensionNumber} - ${ext.extensionName}` : `${ext.extensionNumber}`;
+                    select.appendChild(opt);
+                });
+            } else {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'No valid extensions found';
+                select.appendChild(opt);
+            }
+        } catch (err) {
+            // fallback: show error in dropdown
+            const select = document.getElementById('extensionNumber');
+            select.innerHTML = '';
+            const opt = document.createElement('option');
+            opt.value = '';
+            opt.textContent = 'Error loading extensions';
+            select.appendChild(opt);
+        }
+    }
+
+    async function prepopulateFields() {
+        const envRes = await fetch('/api/env-vars');
+        const envData = await envRes.json();
+        document.getElementById('orgId').value = envData.organizationalId || '';
+        const tokenRes = await fetch('/api/latest-access-token');
+        const tokenData = await tokenRes.json();
+        if (tokenData.accessToken) {
+            accessToken = tokenData.accessToken;
+        }
+        await populateExtensionDropdown();
+    }
+    prepopulateFields();
+
+    document.getElementById('fetchAccountKeyBtn').addEventListener('click', async function() {
+        const orgId = document.getElementById('orgId').value.trim();
+        const extensionNumber = document.getElementById('extensionNumber').value.trim();
+        const errorMsg = document.getElementById('errorMsg');
+        const summaryCards = document.getElementById('summaryCards');
+        errorMsg.style.display = 'none';
+        errorMsg.textContent = '';
+        summaryCards.style.display = 'none';
+        summaryCards.innerHTML = '';
+        if (!accessToken || !orgId || !extensionNumber) {
+            errorMsg.textContent = 'Missing required fields.';
+            errorMsg.style.display = '';
+            return;
+        }
+        try {
+            const res = await fetch(`/api/extension-accountkey?accessToken=${encodeURIComponent(accessToken)}&organizationId=${encodeURIComponent(orgId)}&extensionNumber=${encodeURIComponent(extensionNumber)}`);
+            const data = await res.json();
+            if (res.status !== 200) {
+                errorMsg.textContent = (data.error || 'Error fetching extension report') + (data.details ? ': ' + JSON.stringify(data.details) : '');
+                errorMsg.style.display = '';
+                return;
+            }
+            // Summary cards for key fields
+            if (Array.isArray(data.messages)) {
+                summaryCards.innerHTML = '';
+                summaryCards.style.display = 'none';
+                // Main report table for all available fields except excluded ones
+                const mainKeys = Object.keys(data.messages[0]).filter(k => !['voicemailId','voicemailboxId','organizationId','accountKey','legId'].includes(k));
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.marginTop = '20px';
+                if (data.messages.length > 0) {
+                    const thead = document.createElement('thead');
+                    thead.innerHTML = '<tr>' + mainKeys.map(k => `<th>${k}</th>`).join('') + '</tr>';
+                    table.appendChild(thead);
+                    const tbody = document.createElement('tbody');
+                    tbody.innerHTML = data.messages.map(msg => '<tr>' + mainKeys.map(k => `<td>${msg[k] !== undefined ? msg[k] : ''}</td>`).join('') + '</tr>').join('');
+                    table.appendChild(tbody);
+                }
+                document.getElementById('results').appendChild(table);
+            } else if (data.message) {
+                summaryCards.innerHTML = `
+                    <div class="card"><h4>Extension Number</h4><div class="value">${data.message.extensionNumber || 'N/A'}</div></div>
+                    <div class="card"><h4>Extension Name</h4><div class="value">${data.message.extensionName || 'N/A'}</div></div>
+                    <div class="card"><h4>Account Key</h4><div class="value">${data.message.accountKey || 'N/A'}</div></div>
+                    <div class="card"><h4>Voicemailbox ID</h4><div class="value">${data.message.voicemailboxId || 'N/A'}</div></div>
+                `;
+                summaryCards.style.display = '';
+                // Main report table for all available fields except excluded ones (single message)
+                const mainKeys = Object.keys(data.message).filter(k => !['voicemailId','voicemailboxId','organizationId','accountKey','legId'].includes(k));
+                const table = document.createElement('table');
+                table.style.width = '100%';
+                table.style.marginTop = '20px';
+                const thead = document.createElement('thead');
+                thead.innerHTML = '<tr>' + mainKeys.map(k => `<th>${k}</th>`).join('') + '</tr>';
+                table.appendChild(thead);
+                const tbody = document.createElement('tbody');
+                tbody.innerHTML = '<tr>' + mainKeys.map(k => `<td>${data.message[k] !== undefined ? data.message[k] : ''}</td>`).join('') + '</tr>';
+                table.appendChild(tbody);
+                document.getElementById('results').appendChild(table);
+            }
+        } catch (err) {
+            errorMsg.textContent = 'Network error: ' + err.message;
+            errorMsg.style.display = '';
+        }
+    });
+    </script>
+</body>
+</html>

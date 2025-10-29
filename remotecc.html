@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GoTo Connect Remote Call Control Dashboard</title>
+  <style>
+    /* Style for dashboard layout and table */
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #2c3e50; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    tr.new { background: #e8ffe8; }
+  </style>
+</head>
+<body>
+  <h1>Remote Call Control Dashboard</h1>
+  <table id="events-table">
+    <thead>
+      <tr>
+        <th>PBX ID</th> <!-- PBX identifier -->
+        <th>Call ID</th> <!-- Unique call identifier -->
+        <th>Caller Name</th> <!-- Caller name -->
+        <th>Caller Number</th> <!-- Caller phone number -->
+        <th>Dialed Number</th> <!-- Number dialed by caller -->
+        <th>Area Code</th> <!-- Extracted area code -->
+        <th>Matched State</th> <!-- State from area code lookup -->
+        <th>Matched Extension</th> <!-- Extension from area code lookup -->
+        <th>Timestamp</th> <!-- Event timestamp -->
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // Fetch initial event data from /events REST API
+    function fetchEvents() {
+      fetch('/events') // Request all events from backend
+        .then(res => res.json()) // Parse JSON response
+        .then(data => {
+          const tbody = document.querySelector('#events-table tbody'); // Get table body
+          tbody.innerHTML = ''; // Clear table
+          data.forEach(event => {
+            tbody.appendChild(renderRow(event)); // Add each event as a row
+          });
+        });
+    }
+
+    // Render a table row for an event
+    function renderRow(event, isNew = false) {
+      const tr = document.createElement('tr'); // Create table row
+      if (isNew) tr.classList.add('new'); // Highlight new events
+      tr.innerHTML = `
+        <td>${event.PBX_ID || ''}</td> <!-- PBX ID -->
+        <td>${event.CALL_ID || ''}</td> <!-- Call ID -->
+        <td>${event.CALLER_ID_NAME || ''}</td> <!-- Caller Name -->
+        <td>${event.CALLER_ID_NUMBER || ''}</td> <!-- Caller Number -->
+        <td>${event.DIALED_NUMBER || ''}</td> <!-- Dialed Number -->
+        <td>${event.AREA_CODE || ''}</td> <!-- Area Code -->
+        <td>${event.MATCHED_STATE || ''}</td> <!-- Matched State -->
+        <td>${event.MATCHED_EXTENSION || ''}</td> <!-- Matched Extension -->
+        <td>${event.timestamp || ''}</td> <!-- Timestamp -->
+      `;
+      return tr;
+    }
+
+    // Connect to WebSocket for live updates
+    function setupWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'; // Choose protocol
+      const wsUrl = `${protocol}://${window.location.host}`; // Build WebSocket URL
+      const socket = new window.WebSocket(wsUrl); // Connect to WebSocket
+      socket.onmessage = function(event) {
+        try {
+          const evt = JSON.parse(event.data); // Parse incoming event data
+          console.log(evt); // Debug: log received event object
+          const tbody = document.querySelector('#events-table tbody'); // Get table body
+          tbody.prepend(renderRow(evt, true)); // Add new event to top
+        } catch (e) {}
+      };
+      socket.onerror = function() {
+        console.log('WebSocket error'); // Log WebSocket errors
+      };
+    }
+
+    // Initial load
+    fetchEvents(); // Load all events on page load
+    setupWebSocket(); // Setup WebSocket for live updates
+    setInterval(fetchEvents, 60000); // Optionally refresh every minute
+  </script>
+</body>
+</html>

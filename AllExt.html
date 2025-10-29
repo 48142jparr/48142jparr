@@ -1,0 +1,91 @@
+<!-- AllExt.html - Simple frontend to trigger /api/extensions-list and display results -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Extensions Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f8f9fa; }
+        h1 { color: #007bff; }
+        .form-section { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        label { font-weight: 600; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ced4da; }
+        button { background: #007bff; color: white; padding: 10px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .alert { color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        th, td { border: 1px solid #dee2e6; padding: 10px; text-align: left; font-size: 13px; }
+        th { background: #f8f9fa; font-weight: 600; color: #495057; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>All Extensions Report</h1>
+    <div class="form-section">
+        <label for="accessToken">Access Token</label>
+        <input type="password" id="accessToken" placeholder="Paste your access token here" required autocomplete="current-password">
+        <label for="orgId">Organizational ID</label>
+        <input type="text" id="orgId" placeholder="Paste your organization ID here" required>
+        <button id="fetchBtn">Fetch Extensions</button>
+    </div>
+    <div id="errorMsg" class="alert" style="display:none;"></div>
+    <div id="results"></div>
+    <script>
+    async function prepopulateFields() {
+        try {
+            const envRes = await fetch('/api/env-vars');
+            const envData = await envRes.json();
+            document.getElementById('orgId').value = envData.organizationalId || '';
+            const tokenRes = await fetch('/api/latest-access-token');
+            const tokenData = await tokenRes.json();
+            if (tokenData.accessToken) {
+                document.getElementById('accessToken').value = tokenData.accessToken;
+            }
+        } catch (err) {
+            // fallback: leave fields blank
+        }
+    }
+    prepopulateFields();
+
+    document.getElementById('fetchBtn').addEventListener('click', async function() {
+        const accessToken = document.getElementById('accessToken').value.trim();
+        const orgId = document.getElementById('orgId').value.trim();
+        const errorMsg = document.getElementById('errorMsg');
+        const results = document.getElementById('results');
+        errorMsg.style.display = 'none';
+        errorMsg.textContent = '';
+        results.innerHTML = '';
+        if (!accessToken || !orgId) {
+            errorMsg.textContent = 'Access token and Organization ID are required.';
+            errorMsg.style.display = '';
+            return;
+        }
+        try {
+            const res = await fetch(`/api/extensions-list?accessToken=${encodeURIComponent(accessToken)}&organizationId=${encodeURIComponent(orgId)}`);
+            const data = await res.json();
+            if (res.status !== 200) {
+                errorMsg.textContent = (data.error || 'Error fetching extensions') + (data.details ? ': ' + JSON.stringify(data.details) : '');
+                errorMsg.style.display = '';
+                return;
+            }
+            if (Array.isArray(data.extensions) && data.extensions.length > 0) {
+                let html = '<table><thead><tr>';
+                html += '<th>Extension Number</th><th>User Name</th><th>Voicemailbox ID</th>';
+                html += '</tr></thead><tbody>';
+                html += data.extensions.map(ext => {
+                    const userName = ext.extensionName || ext.userName || 'N/A';
+                    return `<tr><td>${ext.extensionNumber}</td><td>${userName}</td><td>${ext.voicemailboxId}</td></tr>`;
+                }).join('');
+                html += '</tbody></table>';
+                results.innerHTML = html;
+            } else {
+                results.innerHTML = '<div class="alert">No valid extensions found.</div>';
+            }
+        } catch (err) {
+            errorMsg.textContent = 'Network error: ' + err.message;
+            errorMsg.style.display = '';
+        }
+    });
+    </script>
+</body>
+</html>

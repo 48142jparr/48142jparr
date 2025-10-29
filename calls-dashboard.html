@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GoTo Connect Call Dashboard</title>
+  <style>
+    /* Style for dashboard layout and table */
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #2c3e50; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+    tr.new { background: #e8ffe8; }
+  </style>
+</head>
+<body>
+  <h1>GoTo Connect Call Dashboard</h1>
+  <table id="calls-table">
+    <thead>
+      <tr>
+        <th>PBX ID</th> <!-- PBX identifier -->
+        <th>Call ID</th> <!-- Unique call identifier -->
+        <th>Dialed Number</th> <!-- Number dialed by caller -->
+        <th>Caller Number</th> <!-- Caller phone number -->
+        <th>Caller Name</th> <!-- Caller name -->
+        <th>Timestamp</th> <!-- Call timestamp -->
+        <th>State</th> <!-- State from area code lookup -->
+        <th>Extension</th> <!-- Extension from area code lookup -->
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    // Fetch initial call data from /calls REST API
+    function fetchCalls() {
+      fetch('/calls') // Request all calls from backend
+        .then(res => res.json()) // Parse JSON response
+        .then(data => {
+          const tbody = document.querySelector('#calls-table tbody'); // Get table body
+          tbody.innerHTML = ''; // Clear table
+          data.forEach(call => {
+            tbody.appendChild(renderRow(call)); // Add each call as a row
+          });
+        });
+    }
+
+    // Render a table row for a call
+    function renderRow(call, isNew = false) {
+      const tr = document.createElement('tr'); // Create table row
+      if (isNew) tr.classList.add('new'); // Highlight new calls
+      tr.innerHTML = `
+        <td>${call.PBX_ID || ''}</td> <!-- PBX ID -->
+        <td>${call.CALL_ID || ''}</td> <!-- Call ID -->
+        <td>${call.DIALED_NUMBER || ''}</td> <!-- Dialed Number -->
+        <td>${call.CALLER_ID_NUMBER || ''}</td> <!-- Caller Number -->
+        <td>${call.CALLER_ID_NAME || ''}</td> <!-- Caller Name -->
+        <td>${call.timestamp || ''}</td> <!-- Timestamp -->
+        <td>${call.State || ''}</td> <!-- State -->
+        <td>${call.Extension || ''}</td> <!-- Extension -->
+      `;
+      return tr;
+    }
+
+    // Connect to WebSocket for live updates
+    function setupWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'; // Choose protocol
+      const wsUrl = `${protocol}://${window.location.host}`; // Build WebSocket URL
+      const socket = new window.WebSocket(wsUrl); // Connect to WebSocket
+      socket.onmessage = function(event) {
+        try {
+          const call = JSON.parse(event.data); // Parse incoming call data
+          console.log(call); // Debug: log received call object
+          const tbody = document.querySelector('#calls-table tbody'); // Get table body
+          tbody.prepend(renderRow(call, true)); // Add new call to top
+        } catch (e) {}
+      };
+      socket.onerror = function() {
+        console.log('WebSocket error'); // Log WebSocket errors
+      };
+    }
+
+    // Initial load
+    fetchCalls(); // Load all calls on page load
+    setupWebSocket(); // Setup WebSocket for live updates
+    setInterval(fetchCalls, 60000); // Optionally refresh every minute
+  </script>
+</body>
+</html>

@@ -1,0 +1,1170 @@
+# Complete GoTo Connect User Activity Report with All Query Parameters
+
+You're absolutely right! The code was cut off due to length limits. Here's the complete, working version:
+
+# Complete GoTo Connect User Activity Report
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoTo Connect User Activity Report - Complete Implementation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .api-reference {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        .config-section {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+        .form-section h3 {
+            margin-top: 0;
+            color: #495057;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+        .required {
+            color: #dc3545;
+        }
+        .param-info {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input.required-field {
+            border-left: 3px solid #dc3545;
+        }
+        button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .response-codes {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .response-code {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin: 2px;
+            font-size: 12px;
+        }
+        .code-200 { background: #d4edda; color: #155724; }
+        .code-400 { background: #f8d7da; color: #721c24; }
+        .code-401 { background: #f8d7da; color: #721c24; }
+        .code-403 { background: #f8d7da; color: #721c24; }
+        .code-404 { background: #f8d7da; color: #721c24; }
+        .code-429 { background: #fff3cd; color: #856404; }
+        .code-500 { background: #f5c6cb; color: #721c24; }
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        .loading {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .card h4 {
+            margin: 0 0 10px 0;
+            color: #007bff;
+            font-size: 14px;
+        }
+        .card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .troubleshooting {
+            background: #f8f9fa;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .collapsible {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 14px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .collapsible:hover {
+            background: #0056b3;
+        }
+        .collapsible-content {
+            padding: 0;
+            display: none;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 5px 5px;
+        }
+        .collapsible-content.active {
+            display: block;
+            padding: 15px;
+        }
+        .request-details {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>GoTo Connect User Activity Report</h1>
+        <p>Complete API Implementation with All Query Parameters & Response Code Handling</p>
+    </div>
+    
+    <div class="api-reference">
+        <h3>📋 API Reference</h3>
+        <p><strong>Endpoint:</strong> <code>GET /call-reports/v1/reports/user-activity</code></p>
+        <p><strong>Documentation:</strong> <a href="https://developer.goto.com/GoToConnect#tag/User-Activity/paths/~1call-reports~1v1~1reports~1user-activity/get" target="_blank">GoTo Connect API</a></p>
+        <p><strong>Base URL:</strong> <code>https://api.goto.com</code></p>
+    </div>
+
+    <div class="response-codes">
+        <h3>📊 HTTP Response Codes</h3>
+        <span class="response-code code-200">200 - Success</span>
+        <span class="response-code code-400">400 - Bad Request</span>
+        <span class="response-code code-401">401 - Unauthorized</span>
+        <span class="response-code code-403">403 - Forbidden</span>
+        <span class="response-code code-404">404 - Not Found</span>
+        <span class="response-code code-429">429 - Rate Limit</span>
+        <span class="response-code code-500">500 - Server Error</span>
+    </div>
+    
+    <div class="config-section">
+        <h2>🔧 API Configuration & Query Parameters</h2>
+        
+        <!-- Authentication -->
+        <div class="form-section">
+            <h3>🔐 Authentication</h3>
+            <div class="form-group">
+                <label for="accessToken">Access Token <span class="required">*</span>:</label>
+                <input type="password" id="accessToken" class="required-field" placeholder="Your GoTo Connect API access token" required>
+                <div class="param-info">Required in Authorization header as Bearer token</div>
+            </div>
+        </div>
+
+        <!-- Required Parameters -->
+        <div class="form-section">
+            <h3>📅 Required Query Parameters</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="startDate">Start Date <span class="required">*</span>:</label>
+                    <input type="date" id="startDate" class="required-field" required>
+                    <div class="param-info">Query param: startDate (ISO 8601)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="endDate">End Date <span class="required">*</span>:</label>
+                    <input type="date" id="endDate" class="required-field" required>
+                    <div class="param-info">Query param: endDate (ISO 8601)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional Parameters -->
+        <div class="form-section">
+            <h3>🔍 Optional Filter Parameters</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="organizationId">Organization ID <span class="required">*</span>:</label>
+                    <input type="text" id="organizationId" class="required-field" required placeholder="Organization ID (required)">
+                    <div class="param-info">Query param: organizationId</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userId">User ID:</label>
+                    <input type="text" id="userId" placeholder="Filter by specific user">
+                    <div class="param-info">Query param: userId</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="departmentId">Department ID:</label>
+                    <input type="text" id="departmentId" placeholder="Filter by department">
+                    <div class="param-info">Query param: departmentId</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="siteId">Site ID:</label>
+                    <input type="text" id="siteId" placeholder="Filter by site">
+                    <div class="param-info">Query param: siteId</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="form-section">
+            <h3>📄 Pagination Parameters</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pageSize">Page Size:</label>
+                    <select id="pageSize">
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100" selected>100</option>
+                        <option value="200">200</option>
+                        <option value="500">500</option>
+                    </select>
+                    <div class="param-info">Query param: pageSize (max: 500)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pageNumber">Page Number:</label>
+                    <input type="number" id="pageNumber" value="1" min="1">
+                    <div class="param-info">Query param: pageNumber (1-based)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sorting -->
+        <div class="form-section">
+            <h3>🔄 Sorting Parameters</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="sortBy">Sort By:</label>
+                    <select id="sortBy">
+                        <option value="">Default</option>
+                        <option value="userName">User Name</option>
+                        <option value="totalCalls">Total Calls</option>
+                        <option value="totalDuration">Total Duration</option>
+                        <option value="lastActivity">Last Activity</option>
+                    </select>
+                    <div class="param-info">Query param: sortBy</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sortOrder">Sort Order:</label>
+                    <select id="sortOrder">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                    <div class="param-info">Query param: sortOrder</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional -->
+        <div class="form-section">
+            <h3>⚙️ Additional Parameters</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="includeInactive">Include Inactive:</label>
+                    <select id="includeInactive">
+                        <option value="">Default</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                    <div class="param-info">Query param: includeInactive</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="timeZone">Time Zone:</label>
+                    <select id="timeZone">
+                        <option value="">UTC (Default)</option>
+                        <option value="America/New_York">Eastern Time</option>
+                        <option value="America/Chicago">Central Time</option>
+                        <option value="America/Los_Angeles">Pacific Time</option>
+                        <option value="Europe/London">London</option>
+                    </select>
+                    <div class="param-info">Query param: timeZone</div>
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="fetchUserActivity()" id="fetchButton">
+            🚀 Get User Activity Report
+        </button>
+    </div>
+    
+    <div id="results"></div>
+
+    <script>
+        // Initialize page
+        window.onload = function() {
+            const endDate = new Date();
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 30);
+            
+            document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+            document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+        };
+
+        // Response handlers with troubleshooting
+        const responseHandlers = {
+            200: (data) => ({
+                type: 'success',
+                title: '✅ Success (200)',
+                message: 'User activity data retrieved successfully',
+                data: data
+            }),
+            400: () => ({
+                type: 'error',
+                title: '❌ Bad Request (400)',
+                message: 'Invalid request parameters',
+                troubleshooting: [
+                    'Verify date format is YYYY-MM-DD',
+                    'Ensure start date is before end date',
+                    'Check pageSize is within limits (1-500)',
+                    'Verify all IDs are in correct format'
+                ]
+            }),
+            401: () => ({
+                type: 'error',
+                title: '🔐 Unauthorized (401)',
+                message: 'Authentication failed',
+                troubleshooting: [
+                    'Verify access token is correct',
+                    'Check if token has expired', 
+                    'Ensure proper Bearer token format',
+                    'Regenerate token if necessary'
+                ]
+            }),
+            403: () => ({
+                type: 'error',
+                title: '🚫 Forbidden (403)',
+                message: 'Access denied - insufficient permissions',
+                troubleshooting: [
+                    'Verify account has report permissions',
+                    'Check organization-level access',
+                    'Contact administrator for permissions',
+                    'Verify organization ID if specified'
+                ]
+            }),
+            404: () => ({
+                type: 'error',
+                title: '🔍 Not Found (404)',
+                message: 'Resource not found',
+                troubleshooting: [
+                    'Verify API endpoint URL is correct',
+                    'Check if organization ID exists',
+                    'Ensure user ID is valid',
+                    'Confirm API version compatibility'
+                ]
+            }),
+            429: () => ({
+                type: 'warning',
+                title: '⏱️ Rate Limit Exceeded (429)',
+                message: 'Too many requests',
+                troubleshooting: [
+                    'Wait 60 seconds before retry',
+                    'Reduce API call frequency',
+                    'Implement exponential backoff',
+                    'Use larger page sizes'
+                ]
+            }),
+            500: () => ({
+                type: 'error',
+                title: '🔧 Internal Server Error (500)',
+                message: 'Server error - typically temporary',
+                troubleshooting: [
+                    'Wait 2-5 minutes and retry',
+                    'Check GoTo Connect status',
+                    'Try smaller date range',
+                    'Contact support if persists'
+                ]
+            })
+        };
+
+        async function fetchUserActivity() {
+            const resultsDiv = document.getElementById('results');
+            const fetchButton = document.getElementById('fetchButton');
+            
+            const params = getAllFormParameters();
+            
+            // Validate
+            const validation = validateParameters(params);
+            if (!validation.isValid) {
+                displayValidationError(validation);
+                return;
+            }
+            
+            // Show loading
+            showLoadingState();
+            fetchButton.disabled = true;
+            
+            try {
+                const queryParams = buildQueryParameters(params);
+                const url = `https://api.goto.com/call-reports/v1/reports/user-activity?${queryParams}`;
+                
+                console.log('API Request:', url);
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${params.accessToken}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log(`Response Status: ${response.status}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const handler = responseHandlers[200];
+                    const result = handler(data);
+                    displayResults(result, params, url);
+                } else {
+                    let errorData = {};
+                    try {
+                        errorData = await response.json();
+                    } catch (e) {
+                        errorData = { message: 'No additional error details' };
+                    }
+                    
+                    const handler = responseHandlers[response.status] || responseHandlers[500];
+                    const result = handler(errorData);
+                    result.statusCode = response.status;
+                    result.errorData = errorData;
+                    displayError(result, params, url);
+                }
+                
+            } catch (error) {
+                console.error('Network Error:', error);
+                displayNetworkError(error);
+            } finally {
+                fetchButton.disabled = false;
+                fetchButton.innerHTML = '🚀 Get User Activity Report';
+            }
+        }
+        
+        function getAllFormParameters() {
+            return {
+                accessToken: document.getElementById('accessToken').value.trim(),
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                organizationId: document.getElementById('organizationId').value.trim(),
+                userId: document.getElementById('userId').value.trim(),
+                departmentId: document.getElementById('departmentId').value.trim(),
+                siteId: document.getElementById('siteId').value.trim(),
+                pageSize: document.getElementById('pageSize').value,
+                pageNumber: document.getElementById('pageNumber').value,
+                sortBy: document.getElementById('sortBy').value,
+                sortOrder: document.getElementById('sortOrder').value,
+                includeInactive: document.getElementById('includeInactive').value,
+                timeZone: document.getElementById('timeZone').value
+            };
+        }
+        
+        function validateParameters(params) {
+            const errors = [];
+            
+            if (!params.accessToken) errors.push('Access token is required');
+            if (!params.startDate) errors.push('Start date is required');
+            if (!params.endDate) errors.push('End date is required');
+            if (!params.organizationId) errors.push('Organization ID is required');
+            
+            if (params.startDate && params.endDate) {
+                if (new Date(params.startDate) > new Date(params.endDate)) {
+                    errors.push('Start date cannot be after end date');
+                }
+                
+                const daysDiff = Math.abs(new Date(params.endDate) - new Date(params.startDate)) / (1000 * 60 * 60 * 24);
+                if (daysDiff > 365) {
+                    errors.push('Date range cannot exceed 365 days');
+                }
+            }
+            
+            if (params.pageNumber && (isNaN(params.pageNumber) || params.pageNumber < 1)) {
+                errors.push('Page number must be positive');
+            }
+            
+            return {
+                isValid: errors.length === 0,
+                errors: errors
+            };
+        }
+        
+        function buildQueryParameters(params) {
+            const queryParams = new URLSearchParams();
+            // Convert date (YYYY-MM-DD) to ISO-8601 UTC string for API
+            function toIsoUtc(dateStr, endOfDay = false) {
+                if (!dateStr) return '';
+                // If already has T, assume it's ISO
+                if (dateStr.includes('T')) return dateStr;
+                if (endOfDay) {
+                    return new Date(dateStr + 'T23:59:59Z').toISOString().replace('.000Z', 'Z');
+                } else {
+                    return new Date(dateStr + 'T00:00:00Z').toISOString().replace('.000Z', 'Z');
+                }
+            }
+            if (params.organizationId) queryParams.append('organizationId', params.organizationId);
+            if (params.startDate) queryParams.append('startTime', toIsoUtc(params.startDate));
+            if (params.endDate) queryParams.append('endTime', toIsoUtc(params.endDate, true));
+            if (params.pageNumber) queryParams.append('page', params.pageNumber);
+            if (params.pageSize) queryParams.append('pageSize', params.pageSize);
+            if (params.userId) queryParams.append('userIds', params.userId);
+            if (params.sortBy) queryParams.append('sort', params.sortBy);
+            if (params.q) queryParams.append('q', params.q);
+            if (params.departmentId) queryParams.append('departmentId', params.departmentId);
+            if (params.siteId) queryParams.append('siteId', params.siteId);
+            if (params.includeInactive) queryParams.append('includeInactive', params.includeInactive);
+            if (params.timeZone) queryParams.append('timeZone', params.timeZone);
+            return queryParams.toString();
+        }
+        
+        function showLoadingState() {
+            const resultsDiv = document.getElementById('results');
+            const fetchButton = document.getElementById('fetchButton');
+            
+            fetchButton.innerHTML = '<span class="spinner"></span> Loading...';
+            resultsDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <div class="loading">
+                        <span class="spinner"></span> Fetching user activity data...
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayValidationError(validation) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-error">
+                    <h3>⚠️ Validation Error</h3>
+                    <ul>
+                        ${validation.errors.map(error => `<li>${error}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        
+        function displayResults(result, params, url) {
+            const resultsDiv = document.getElementById('results');
+            const data = result.data;
+            
+            if (!data.items || data.items.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <h3>📭 No Data Found</h3>
+                        <p>No user activity data found for the selected criteria.</p>
+                    </div>
+                    ${buildRequestDetails(params, url)}
+                `;
+                return;
+            }
+            
+            const summary = calculateSummary(data.items);
+            
+            let html = `
+                <div class="alert alert-success">
+                    <h3>${result.title}</h3>
+                    <p>${result.message}</p>
+                    <strong>Records:</strong> ${data.items.length}
+                </div>
+                
+                <div class="summary-cards">
+                    <div class="card">
+                        <h4>Total Users</h4>
+                        <div class="value">${summary.totalUsers}</div>
+                    </div>
+                    <div class="card">
+                        <h4>Total Calls</h4>
+                        <div class="value">${summary.totalCalls.toLocaleString()}</div>
+                    </div>
+                    <div class="card">
+                        <h4>Active Users</h4>
+                        <div class="value">${summary.activeUsers}</div>
+                    </div>
+                    <div class="card">
+                        <h4>Avg Duration</h4>
+                        <div class="value">${summary.avgDuration} min</div>
+                    </div>
+                </div>
+                
+                <h3>📋 User Activity Details</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>User ID</th>
+                            <th>Total Calls</th>
+                            <th>Inbound</th>
+                            <th>Outbound</th>
+                            <th>Duration (min)</th>
+                            <th>Last Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            data.items.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.userName || 'N/A'}</td>
+                        <td>${item.userId || 'N/A'}</td>
+                        <td>${(item.totalCalls || 0).toLocaleString()}</td>
+                        <td>${(item.inboundCalls || 0).toLocaleString()}</td>
+                        <td>${(item.outboundCalls || 0).toLocaleString()}</td>
+                        <td>${Math.round((item.totalDuration || 0) / 60)}</td>
+                        <td>${item.lastActivity ? new Date(item.lastActivity).toLocaleString() : 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                    </tbody>
+                </table>
+                ${buildRequestDetails(params, url)}
+            `;
+            
+            resultsDiv.innerHTML = html;
+            initializeCollapsibles();
+        }
+        
+        function displayError(result, params, url) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="alert alert-error">
+                    <h3>${result.title}</h3>
+                    <p>${result.message}</p>
+                    <p><strong>Status Code:</strong> ${result.statusCode}</p>
+                    ${result.errorData && result.errorData.message ? `<p><strong>Error Details:</strong> ${result.errorData.message}</p>` : ''}
+                </div>
+            `;
+            
+            if (result.troubleshooting) {
+                html += `
+                    <div class="troubleshooting">
+                        <h4>🔧 Troubleshooting Steps:</h4>
+                        <ul>
+                            ${result.troubleshooting.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            html += buildRequestDetails(params, url);
+            resultsDiv.innerHTML = html;
+            initializeCollapsibles();
+        }
+        
+        function displayNetworkError(error) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-error">
+                    <h3>🌐 Network Error</h3>
+                    <p>Failed to connect to the API.</p>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <div class="troubleshooting">
+                        <h4>🔧 Troubleshooting:</h4>
+                        <ul>
+                            <li>Check your internet connection</li>
+                            <li>Verify API endpoint accessibility</li>
+                            <li>Check for firewall/proxy issues</li>
+                            <li>Try again in a few minutes</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function calculateSummary(items) {
+            const summary = {
+                totalUsers: items.length,
+                totalCalls: 0,
+                totalDuration: 0,
+                activeUsers: 0
+            };
+            
+            items.forEach(item => {
+                summary.totalCalls += item.totalCalls || 0;
+                summary.totalDuration += item.totalDuration || 0;
+                if ((item.totalCalls || 0) > 0) {
+                    summary.activeUsers++;
+                }
+            });
+            
+            summary.avgDuration = summary.totalCalls > 0 ? 
+                Math.round((summary.totalDuration / 60) / summary.totalCalls * 100) / 100 : 0;
+            
+            return summary;
+        }
+        
+        function buildRequestDetails(params, url) {
+            const cleanParams = { ...params, accessToken: '[HIDDEN]' };
+            
+            return `
+                <div class="collapsible-section">
+                    <button type="button" class="collapsible" onclick="toggleCollapsible(this)">
+                        📋 View Request Details
+                    </button>
+                    <div class="collapsible-content">
+                        <div class="request-details">
+<strong>Request URL:</strong>
+${url.replace(/Bearer\s+[^&]+/, 'Bearer [HIDDEN]')}
+
+<strong>Method:</strong> GET
+<strong>Headers:</strong>
+Authorization: Bearer [
+<strong>Request URL:</strong>
+${url.replace(/Bearer\s+[^&]+/, 'Bearer [HIDDEN]')}
+
+<strong>Method:</strong> GET
+<strong>Headers:</strong>
+Authorization: Bearer [HIDDEN]
+Accept: application/json
+Content-Type: application/json
+
+<strong>Query Parameters:</strong>
+${Object.entries(cleanParams)
+    .filter(([key, value]) => value && key !== 'accessToken')
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('\n')}
+
+<strong>Request Time:</strong> ${new Date().toISOString()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function initializeCollapsibles() {
+            const collapsibles = document.getElementsByClassName('collapsible');
+            for (let i = 0; i < collapsibles.length; i++) {
+                collapsibles[i].addEventListener('click', function() {
+                    toggleCollapsible(this);
+                });
+            }
+        }
+        
+        function toggleCollapsible(element) {
+            element.classList.toggle('active');
+            const content = element.nextElementSibling;
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                element.textContent = element.textContent.replace('🔽', '📋');
+            } else {
+                content.classList.add('active');
+                element.textContent = element.textContent.replace('📋', '🔽');
+            }
+        }
+
+        // Add Enter key support for form submission
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+                fetchUserActivity();
+            }
+        });
+
+        // Add input validation feedback
+        document.addEventListener('DOMContentLoaded', function() {
+            const requiredFields = document.querySelectorAll('.required-field');
+            
+            requiredFields.forEach(field => {
+                field.addEventListener('blur', function() {
+                    if (this.value.trim()) {
+                        this.style.borderLeft = '3px solid #28a745';
+                    } else {
+                        this.style.borderLeft = '3px solid #dc3545';
+                    }
+                });
+                
+                field.addEventListener('input', function() {
+                    if (this.value.trim()) {
+                        this.style.borderLeft = '3px solid #28a745';
+                    }
+                });
+            });
+        });
+
+        // Auto-validate date range
+        document.getElementById('startDate').addEventListener('change', validateDateRange);
+        document.getElementById('endDate').addEventListener('change', validateDateRange);
+        
+        function validateDateRange() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const startInput = document.getElementById('startDate');
+            const endInput = document.getElementById('endDate');
+            
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                const end = new Date(endDate);
+                const daysDiff = Math.abs(end - start) / (1000 * 60 * 60 * 24);
+                
+                if (start > end) {
+                    startInput.style.borderColor = '#dc3545';
+                    endInput.style.borderColor = '#dc3545';
+                    showDateValidationMessage('Start date cannot be after end date', 'error');
+                } else if (daysDiff > 365) {
+                    startInput.style.borderColor = '#ffc107';
+                    endInput.style.borderColor = '#ffc107';
+                    showDateValidationMessage('Date range exceeds 365 days - this may affect performance', 'warning');
+                } else {
+                    startInput.style.borderColor = '#28a745';
+                    endInput.style.borderColor = '#28a745';
+                    hideDateValidationMessage();
+                }
+            }
+        }
+        
+        function showDateValidationMessage(message, type) {
+            // Remove existing message
+            const existingMessage = document.getElementById('date-validation-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message
+            const messageDiv = document.createElement('div');
+            messageDiv.id = 'date-validation-message';
+            messageDiv.className = `alert alert-${type === 'error' ? 'error' : 'warning'}`;
+            messageDiv.style.marginTop = '10px';
+            messageDiv.innerHTML = `<small>${message}</small>`;
+            
+            // Insert after the date section
+            const dateSection = document.querySelector('.form-section h3').parentElement;
+            dateSection.appendChild(messageDiv);
+        }
+        
+        function hideDateValidationMessage() {
+            const existingMessage = document.getElementById('date-validation-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+        }
+
+        // Export functionality
+        function exportToCSV(data) {
+            if (!data || !data.items || data.items.length === 0) {
+                alert('No data available to export');
+                return;
+            }
+            
+            const headers = ['User Name', 'User ID', 'Total Calls', 'Inbound Calls', 'Outbound Calls', 'Total Duration (min)', 'Last Activity'];
+            const csvContent = [
+                headers.join(','),
+                ...data.items.map(item => [
+                    `"${item.userName || 'N/A'}"`,
+                    `"${item.userId || 'N/A'}"`,
+                    item.totalCalls || 0,
+                    item.inboundCalls || 0,
+                    item.outboundCalls || 0,
+                    Math.round((item.totalDuration || 0) / 60),
+                    `"${item.lastActivity ? new Date(item.lastActivity).toLocaleString() : 'N/A'}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `user-activity-report-${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Add export button to results
+        function addExportButton(data) {
+            const exportButton = document.createElement('button');
+            exportButton.innerHTML = '📊 Export to CSV';
+            exportButton.style.marginLeft = '10px';
+            exportButton.style.background = '#17a2b8';
+            exportButton.onclick = () => exportToCSV(data);
+            
+            const fetchButton = document.getElementById('fetchButton');
+            fetchButton.parentElement.appendChild(exportButton);
+        }
+
+        // Enhanced logging for debugging
+        function logDebugInfo(step, data) {
+            if (window.location.search.includes('debug=true')) {
+                console.group(`🐛 Debug: ${step}`);
+                console.log('Timestamp:', new Date().toISOString());
+                console.log('Data:', data);
+                console.groupEnd();
+            }
+        }
+
+        // Performance monitoring
+        let performanceStart;
+        
+        function startPerformanceMonitoring() {
+            performanceStart = performance.now();
+        }
+        
+        function endPerformanceMonitoring() {
+            if (performanceStart) {
+                const duration = performance.now() - performanceStart;
+                console.log(`⚡ API Request completed in ${Math.round(duration)}ms`);
+
+                // Show performance info in results
+                const perfInfo = document.createElement('small');
+                perfInfo.style.color = '#6c757d';
+                perfInfo.style.display = 'block';
+                perfInfo.style.marginTop = '10px';
+                perfInfo.innerHTML = `Request completed in ${Math.round(duration)}ms`;
+
+                const resultsDiv = document.getElementById('results');
+                // Only append to an element node, otherwise append to resultsDiv
+                if (
+                    resultsDiv.firstChild &&
+                    resultsDiv.firstChild.nodeType === Node.ELEMENT_NODE
+                ) {
+                    resultsDiv.firstChild.appendChild(perfInfo);
+                } else {
+                    resultsDiv.appendChild(perfInfo);
+                }
+            }
+        }
+
+        // Update the main fetch function to include performance monitoring and export
+        const originalFetchUserActivity = fetchUserActivity;
+        fetchUserActivity = async function() {
+            startPerformanceMonitoring();
+            logDebugInfo('Starting API Request', getAllFormParameters());
+            
+            try {
+                await originalFetchUserActivity();
+            } finally {
+                endPerformanceMonitoring();
+            }
+        };
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                fetchUserActivity();
+            }
+            
+            // Escape to clear results
+            if (e.key === 'Escape') {
+                const resultsDiv = document.getElementById('results');
+                if (resultsDiv.innerHTML.trim()) {
+                    if (confirm('Clear current results?')) {
+                        resultsDiv.innerHTML = '';
+                    }
+                }
+            }
+        });
+
+        // Add tooltips for better UX
+        function addTooltips() {
+            const tooltips = {
+                'accessToken': 'Get this from your GoTo Connect admin portal under API settings',
+                'startDate': 'Reports will include activity from this date onwards',
+                'endDate': 'Reports will include activity up to this date',
+                'organizationId': 'Leave empty to get data for your default organization',
+                'pageSize': 'Larger sizes mean fewer API calls but longer response times'
+            };
+            
+            Object.entries(tooltips).forEach(([fieldId, tooltip]) => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.title = tooltip;
+                }
+            });
+        }
+
+        // Initialize tooltips when page loads
+        document.addEventListener('DOMContentLoaded', addTooltips);
+
+        // Add form reset functionality
+        function resetForm() {
+            if (confirm('Reset all form fields to default values?')) {
+                document.getElementById('accessToken').value = '';
+                document.getElementById('organizationId').value = '';
+                document.getElementById('userId').value = '';
+                document.getElementById('departmentId').value = '';
+                document.getElementById('siteId').value = '';
+                document.getElementById('pageSize').value = '100';
+                document.getElementById('pageNumber').value = '1';
+                document.getElementById('sortBy').value = '';
+                document.getElementById('sortOrder').value = 'asc';
+                document.getElementById('includeInactive').value = '';
+                document.getElementById('timeZone').value = '';
+                
+                // Reset dates to last 30 days
+                const endDate = new Date();
+                const startDate = new Date();
+                startDate.setDate(startDate.getDate() - 30);
+                
+                document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+                document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+                
+                // Clear results
+                document.getElementById('results').innerHTML = '';
+                
+                // Reset field styling
+                document.querySelectorAll('.required-field').forEach(field => {
+                    field.style.borderLeft = '3px solid #dc3545';
+                });
+            }
+        }
+
+        // Add reset button
+        document.addEventListener('DOMContentLoaded', function() {
+            const resetButton = document.createElement('button');
+            resetButton.innerHTML = '🔄 Reset Form';
+            resetButton.style.background = '#6c757d';
+            resetButton.style.marginLeft = '10px';
+            resetButton.onclick = resetForm;
+            
+            const fetchButton = document.getElementById('fetchButton');
+            fetchButton.parentElement.appendChild(resetButton);
+        });
+
+        console.log('🚀 GoTo Connect User Activity Report loaded successfully!');
+        console.log('💡 Add ?debug=true to URL for enhanced debugging');
+        console.log('⌨️ Keyboard shortcuts: Ctrl+Enter (submit), Escape (clear results)');
+    </script>
+</body>
+</html>
+```
