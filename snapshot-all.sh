@@ -4,6 +4,13 @@ set -euo pipefail
 # Snapshot the repository: commit, create a backup branch + tag, and push them
 # REPO_DIR may be overridden by setting the REPO_DIR environment variable when running the script
 REPO_DIR="${REPO_DIR:-/Users/parrish/Library/CloudStorage/OneDrive-GoToTechnologiesUSALLC/GoTo/API/User Activity Summary}"
+
+# If the expected REPO_DIR doesn't exist (e.g. running on GitHub-hosted runner), fallback to the current workspace
+if [ ! -d "$REPO_DIR" ]; then
+  echo "REPO_DIR '$REPO_DIR' not found; using current working directory"
+  REPO_DIR="$PWD"
+fi
+
 cd "$REPO_DIR"
 
 # Stage all changes
