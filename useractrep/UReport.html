@@ -1,0 +1,1009 @@
+<!--
+UReport.html - GoTo Connect User Activity Report
+This file provides a complete web UI for querying and displaying user activity from the GoTo Connect API.
+Each section and function is commented for clarity.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Set character encoding and viewport for responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoTo Connect User Activity Report - Complete Implementation</title>
+    <!-- Page styling for layout, colors, and UI elements -->
+    <style>
+        /* General page styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        /* Header styling */
+        .header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        /* API reference box styling */
+        .api-reference {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        /* Configuration section styling */
+        .config-section {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        /* Form section styling */
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background: #f8f9fa;
+        }
+        .form-section h3 {
+            margin-top: 0;
+            color: #495057;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+        .required {
+            color: #dc3545;
+        }
+        .param-info {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input.required-field {
+            border-left: 3px solid #dc3545;
+        }
+        button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .response-codes {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .response-code {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin: 2px;
+            font-size: 12px;
+        }
+        .code-200 { background: #d4edda; color: #155724; }
+        .code-400 { background: #f8d7da; color: #721c24; }
+        .code-401 { background: #f8d7da; color: #721c24; }
+        .code-403 { background: #f8d7da; color: #721c24; }
+        .code-404 { background: #f8d7da; color: #721c24; }
+        .code-429 { background: #fff3cd; color: #856404; }
+        .code-500 { background: #f5c6cb; color: #721c24; }
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+        }
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+        .loading {
+            text-align: center;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+            font-size: 13px;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .card h4 {
+            margin: 0 0 10px 0;
+            color: #007bff;
+            font-size: 14px;
+        }
+        .card .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .troubleshooting {
+            background: #f8f9fa;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .collapsible {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 14px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .collapsible:hover {
+            background: #0056b3;
+        }
+        .collapsible-content {
+            padding: 0;
+            display: none;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 5px 5px;
+        }
+        .collapsible-content.active {
+            display: block;
+            padding: 15px;
+        }
+        .request-details {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page header -->
+    <div class="header">
+        <img src="image.png" alt="GoTo Logo" style="height:48px;vertical-align:middle;margin-right:16px;">
+        <h1 style="display:inline-block;vertical-align:middle;">GoTo Connect User Activity Report</h1>
+        <p>Complete API Implementation with All Query Parameters & Response Code Handling</p>
+    </div>
+    <!-- API reference section -->
+    <div class="api-reference">
+        <h3>📋 API Reference</h3>
+        <p><strong>Endpoint:</strong> <code>GET /call-reports/v1/reports/user-activity</code></p>
+        <p><strong>Documentation:</strong> <a href="https://developer.goto.com/GoToConnect#tag/User-Activity/paths/~1call-reports~1v1~1reports~1user-activity/get" target="_blank">GoTo Connect API</a></p>
+        <p><strong>Base URL:</strong> <code>https://api.goto.com</code></p>
+    </div>
+    <!-- HTTP response codes legend -->
+    <div class="response-codes">
+        <h3>📊 HTTP Response Codes</h3>
+        <span class="response-code code-200">200 - Success</span>
+        <span class="response-code code-400">400 - Bad Request</span>
+        <span class="response-code code-401">401 - Unauthorized</span>
+        <span class="response-code code-403">403 - Forbidden</span>
+        <span class="response-code code-404">404 - Not Found</span>
+        <span class="response-code code-429">429 - Rate Limit</span>
+        <span class="response-code code-500">500 - Server Error</span>
+    </div>
+    <!-- Main configuration and form section -->
+    <div class="config-section">
+        <h2>🔧 API Configuration & Query Parameters</h2>
+        <!-- Authentication section -->
+        <div class="form-section">
+            <h3>🔐 Authentication</h3>
+            <div class="form-group">
+                <label for="accessToken">Access Token <span class="required">*</span>:</label>
+                <input type="password" id="accessToken" class="required-field" placeholder="Your GoTo Connect API access token" required>
+                <div class="param-info">Required in Authorization header as Bearer token</div>
+            </div>
+        </div>
+
+        <!-- Required Parameters -->
+        <div class="form-section">
+            <h3>📅 Required Query Parameters</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <!-- Start date input for report range -->
+                    <label for="startDate">Start Date <span class="required">*</span>:</label>
+                    <input type="date" id="startDate" class="required-field" required>
+                    <div class="param-info">Query param: startDate (ISO 8601)</div>
+                </div>
+                <div class="form-group">
+                    <!-- End date input for report range -->
+                    <label for="endDate">End Date <span class="required">*</span>:</label>
+                    <input type="date" id="endDate" class="required-field" required>
+                    <div class="param-info">Query param: endDate (ISO 8601)</div>
+                </div>
+                <div class="form-group">
+                    <!-- Organization ID input -->
+                    <label for="organizationId">Organization ID <span class="required">*</span>:</label>
+                    <input type="text" id="organizationId" class="required-field" required placeholder="Organization ID (required)" value="53649e6d-bbbf-4afc-8d01-bdbf2e12b090">
+                    <div class="param-info">Query param: organizationId</div>
+                </div>
+                <div class="form-group">
+                    <!-- Page number input -->
+                    <label for="page">Page (integer, zero-based):</label>
+                    <input type="number" id="page" value="0" min="0">
+                    <div class="param-info">Zero-based integer representing the page desired. Default: 0</div>
+                </div>
+                <div class="form-group">
+                    <!-- Page size input -->
+                    <label for="pageSize">Page Size (integer, 1-10000):</label>
+                    <input type="number" id="pageSize" value="100" min="1" max="10000">
+                    <div class="param-info">Maximum number of items returned in a page. Default: 100</div>
+                </div>
+                <div class="form-group">
+                    <!-- Query input for fuzzy search -->
+                    <label for="q">Query (fuzzy search on userName):</label>
+                    <input type="text" id="q" placeholder="Search userName">
+                    <div class="param-info">Array of strings. Fuzzy search on userName.</div>
+                </div>
+                <div class="form-group">
+                    <!-- User IDs input -->
+                    <label for="userIds">User IDs (comma-separated):</label>
+                    <input type="text" id="userIds" placeholder="e.g. id1,id2,id3">
+                    <div class="param-info">Array of strings. Filter results by userId.</div>
+                </div>
+                <div class="form-group">
+                    <!-- Sort input -->
+                    <label for="sort">Sort (comma-separated):</label>
+                    <input type="text" id="sort" placeholder="e.g. -userName,+totalCallVolume">
+                    <div class="param-info">Array of strings. See API docs for allowed values.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Button to fetch report -->
+        <button onclick="fetchUserActivity()" id="fetchButton">
+            🚀 Get User Activity Report
+        </button>
+    </div>
+    
+    <!-- Results output -->
+    <div id="results"></div>
+
+    <!-- Main script for UI logic, API calls, and rendering -->
+    <script>
+        // Initialize page and prepopulate fields
+        window.onload = async function() {
+            // Prepopulate all required fields
+            document.getElementById('startDate').value = '2025-09-06';
+            document.getElementById('endDate').value = '2025-10-06';
+            document.getElementById('organizationId').value = '53649e6d-bbbf-4afc-8d01-bdbf2e12b090';
+            // Auto-populate access token from backend if available
+            try {
+                const resp = await fetch('/api/latest-access-token');
+                if (resp.ok) {
+                    const data = await resp.json();
+                    document.getElementById('accessToken').value = data.accessToken;
+                }
+            } catch (e) { /* ignore if not available */ }
+            // Always enable the fetch button
+            document.getElementById('fetchButton').disabled = false;
+        };
+
+        // Remove all validation requirements for the fetch button
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('fetchButton').disabled = false;
+        });
+
+        // Response handlers for different HTTP codes
+        const responseHandlers = {
+            200: (data) => ({
+                type: 'success',
+                title: '✅ Success (200)',
+                message: 'User activity data retrieved successfully',
+                data: data
+            }),
+            400: () => ({
+                type: 'error',
+                title: '❌ Bad Request (400)',
+                message: 'Invalid request parameters',
+                troubleshooting: [
+                    'Verify date format is YYYY-MM-DD',
+                    'Ensure start date is before end date',
+                    'Check pageSize is within limits (1-500)',
+                    'Verify all IDs are in correct format'
+                ]
+            }),
+            401: () => ({
+                type: 'error',
+                title: '🔐 Unauthorized (401)',
+                message: 'Authentication failed',
+                troubleshooting: [
+                    'Verify access token is correct',
+                    'Check if token has expired', 
+                    'Ensure proper Bearer token format',
+                    'Regenerate token if necessary'
+                ]
+            }),
+            403: () => ({
+                type: 'error',
+                title: '🚫 Forbidden (403)',
+                message: 'Access denied - insufficient permissions',
+                troubleshooting: [
+                    'Verify account has report permissions',
+                    'Check organization-level access',
+                    'Contact administrator for permissions',
+                    'Verify organization ID if specified'
+                ]
+            }),
+            404: () => ({
+                type: 'error',
+                title: '🔍 Not Found (404)',
+                message: 'Resource not found',
+                troubleshooting: [
+                    'Verify API endpoint URL is correct',
+                    'Check if organization ID exists',
+                    'Ensure user ID is valid',
+                    'Confirm API version compatibility'
+                ]
+            }),
+            429: () => ({
+                type: 'warning',
+                title: '⏱️ Rate Limit Exceeded (429)',
+                message: 'Too many requests',
+                troubleshooting: [
+                    'Wait 60 seconds before retry',
+                    'Reduce API call frequency',
+                    'Implement exponential backoff',
+                    'Use larger page sizes'
+                ]
+            }),
+            500: () => ({
+                type: 'error',
+                title: '🔧 Internal Server Error (500)',
+                message: 'Server error - typically temporary',
+                troubleshooting: [
+                    'Wait 2-5 minutes and retry',
+                    'Check GoTo Connect status',
+                    'Try smaller date range',
+                    'Contact support if persists'
+                ]
+            })
+        };
+
+        // Main function to fetch user activity report
+        async function fetchUserActivity() {
+            const resultsDiv = document.getElementById('results');
+            const fetchButton = document.getElementById('fetchButton');
+            const params = getAllFormParameters();
+            // Show loading
+            showLoadingState();
+            fetchButton.disabled = true;
+            try {
+                const queryParams = buildQueryParameters(params);
+                // Use backend proxy endpoint instead of direct GoTo API call
+                const url = `/api/user-activity?${queryParams}`;
+                console.log('Proxy API Request:', url);
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log(`Proxy Response Status: ${response.status}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Enhanced debug: log the full backend response
+                    console.log('Full backend response:', JSON.stringify(data, null, 2));
+                    // If data.items is missing, try to infer the correct property
+                    let items = data.items;
+                    if (!items && Array.isArray(data)) {
+                        items = data;
+                    } else if (!items && typeof data === 'object') {
+                        // Try to find the first array property
+                        for (const key in data) {
+                            if (Array.isArray(data[key])) {
+                                items = data[key];
+                                break;
+                            }
+                        }
+                    }
+                    // Use the same logic as backend debug: log what will be rendered
+                    console.log('UI will render items:', items);
+                    const handler = responseHandlers[200];
+                    // Pass the correct items to the display function
+                    const result = handler({ ...data, items });
+                    displayResults(result, params, url);
+                } else {
+                    let errorData = {};
+                    try {
+                        errorData = await response.json();
+                    } catch (e) {
+                        errorData = { message: 'No additional error details' };
+                    }
+                    console.error('Proxy Error Data:', errorData);
+                    const handler = responseHandlers[response.status] || responseHandlers[500];
+                    const result = handler(errorData);
+                    result.statusCode = response.status;
+                    result.errorData = errorData;
+                    displayError(result, params, url);
+                }
+            } catch (error) {
+                console.error('Network Error:', error);
+                displayNetworkError(error);
+            } finally {
+                fetchButton.disabled = false;
+                fetchButton.innerHTML = '🚀 Get User Activity Report';
+            }
+        }
+        
+        // Collect all form parameters for API request
+        function getAllFormParameters() {
+            return {
+                accessToken: document.getElementById('accessToken').value.trim(),
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                organizationId: document.getElementById('organizationId').value.trim(),
+                page: document.getElementById('page').value,
+                pageSize: document.getElementById('pageSize').value,
+                q: document.getElementById('q').value,
+                userIds: document.getElementById('userIds').value,
+                sort: document.getElementById('sort').value
+            };
+        }
+        
+        // Build query string for backend proxy
+        function buildQueryParameters(params) {
+            const queryParams = new URLSearchParams();
+            function toIsoNoZ(dateStr, endOfDay = false) {
+                if (!dateStr) return '';
+                if (dateStr.includes('T')) return dateStr.replace('Z', '');
+                if (endOfDay) {
+                    return `${dateStr}T23:59:59`;
+                } else {
+                    return `${dateStr}T00:00:00`;
+                }
+            }
+            if (params.organizationId) queryParams.append('organizationId', params.organizationId);
+            if (params.startDate) queryParams.append('startTime', toIsoNoZ(params.startDate));
+            if (params.endDate) queryParams.append('endTime', toIsoNoZ(params.endDate, true));
+            if (params.accessToken) queryParams.append('accessToken', params.accessToken);
+            if (params.page) queryParams.append('page', params.page);
+            if (params.pageSize) queryParams.append('pageSize', params.pageSize);
+            if (params.q) {
+                // API expects array, so split by comma
+                params.q.split(',').forEach(qval => {
+                    if (qval.trim()) queryParams.append('q', qval.trim());
+                });
+            }
+            if (params.userIds) {
+                params.userIds.split(',').forEach(uid => {
+                    if (uid.trim()) queryParams.append('userIds', uid.trim());
+                });
+            }
+            if (params.sort) {
+                params.sort.split(',').forEach(sortVal => {
+                    if (sortVal.trim()) queryParams.append('sort', sortVal.trim());
+                });
+            }
+            return queryParams.toString();
+        }
+
+        // Show loading spinner and message
+        function showLoadingState() {
+            const resultsDiv = document.getElementById('results');
+            const fetchButton = document.getElementById('fetchButton');
+            
+            fetchButton.innerHTML = '<span class="spinner"></span> Loading...';
+            resultsDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <div class="loading">
+                        <span class="spinner"></span> Fetching user activity data...
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Display validation errors
+        function displayValidationError(validation) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-error">
+                    <h3>⚠️ Validation Error</h3>
+                    <ul>
+                        ${validation.errors.map(error => `<li>${error}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+        }
+        
+        // Display results table and summary cards
+        function displayResults(result, params, url) {
+            const resultsDiv = document.getElementById('results');
+            const data = result.data;
+            
+            if (!data.items || data.items.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-warning">
+                        <h3>📭 No Data Found</h3>
+                        <p>No user activity data found for the selected criteria.</p>
+                    </div>
+                    ${buildRequestDetails(params, url)}
+                `;
+                return;
+            }
+            
+            const summary = calculateSummary(data.items);
+            let html = `
+                <div class="alert alert-success">
+                    <h3>${result.title}</h3>
+                    <p>${result.message}</p>
+                    <strong>Records:</strong> ${data.items.length}
+                </div>
+                <div class="summary-cards">
+                    <div class="card">
+                        <h4>Total Users</h4>
+                        <div class="value">${summary.totalUsers}</div>
+                    </div>
+                    <div class="card">
+                        <h4>Total Calls</h4>
+                        <div class="value">${summary.totalCalls.toLocaleString()}</div>
+                    </div>
+                    <div class="card">
+                        <h4>Active Users</h4>
+                        <div class="value">${summary.activeUsers}</div>
+                    </div>
+                    <div class="card">
+                        <h4>Avg Duration</h4>
+                        <div class="value">${summary.avgDuration} min</div>
+                    </div>
+                </div>
+                <h3>📋 User Activity Details</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User Name</th>
+                            <th>User ID</th>
+                            <th>Inbound Volume</th>
+                            <th>Inbound Duration (ms)</th>
+                            <th>Outbound Volume</th>
+                            <th>Outbound Duration (ms)</th>
+                            <th>Average Duration (ms)</th>
+                            <th>Total Calls (Volume)</th>
+                            <th>Total Duration (ms)</th>
+                            <th>Inbound Queue Volume</th>
+                            <th>Last Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            data.items.forEach(item => {
+                const dv = item.dataValues || {};
+                html += `
+                    <tr>
+                        <td>${item.userName || 'N/A'}</td>
+                        <td>${item.userId || 'N/A'}</td>
+                        <td>${dv.inboundVolume ?? 'N/A'}</td>
+                        <td>${dv.inboundDuration ?? 'N/A'}</td>
+                        <td>${dv.outboundVolume ?? 'N/A'}</td>
+                        <td>${dv.outboundDuration ?? 'N/A'}</td>
+                        <td>${dv.averageDuration ?? 'N/A'}</td>
+                        <td>${dv.volume ?? 'N/A'}</td>
+                        <td>${dv.totalDuration ?? 'N/A'}</td>
+                        <td>${dv.inboundQueueVolume ?? 'N/A'}</td>
+                        <td>${item.lastActivity ? new Date(item.lastActivity).toLocaleString() : 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            html += `
+                    </tbody>
+                </table>
+                ${buildRequestDetails(params, url)}
+            `;
+            
+            resultsDiv.innerHTML = html;
+            initializeCollapsibles();
+        }
+        
+        // Display error message and troubleshooting
+        function displayError(result, params, url) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <div class="alert alert-error">
+                    <h3>${result.title}</h3>
+                    <p>${result.message}</p>
+                    <p><strong>Status Code:</strong> ${result.statusCode}</p>
+                    ${result.errorData && result.errorData.message ? `<p><strong>Error Details:</strong> ${result.errorData.message}</p>` : ''}
+                </div>
+            `;
+            
+            if (result.troubleshooting) {
+                html += `
+                    <div class="troubleshooting">
+                        <h4>🔧 Troubleshooting Steps:</h4>
+                        <ul>
+                            ${result.troubleshooting.map(step => `<li>${step}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            html += buildRequestDetails(params, url);
+            resultsDiv.innerHTML = html;
+            initializeCollapsibles();
+        }
+        
+        // Display network error message
+        function displayNetworkError(error) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-error">
+                    <h3>🌐 Network Error</h3>
+                    <p>Failed to connect to the API.</p>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <div class="troubleshooting">
+                        <h4>🔧 Troubleshooting:</h4>
+                        <ul>
+                            <li>Check your internet connection</li>
+                            <li>Verify API endpoint accessibility</li>
+                            <li>Check for firewall/proxy issues</li>
+                            <li>Try again in a few minutes</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Calculate summary statistics from items
+        function calculateSummary(items) {
+            const summary = {
+                totalUsers: items.length,
+                totalCalls: 0,
+                totalDuration: 0,
+                activeUsers: 0
+            };
+            items.forEach(item => {
+                const dv = item.dataValues || {};
+                summary.totalCalls += dv.volume || 0;
+                summary.totalDuration += dv.totalDuration || 0;
+                if ((dv.volume || 0) > 0) {
+                    summary.activeUsers++;
+                }
+            });
+            summary.avgDuration = summary.totalCalls > 0 ? 
+                Math.round((summary.totalDuration / 60000) / summary.totalCalls * 100) / 100 : 0;
+            return summary;
+        }
+        
+        // Build request details for collapsible section
+        function buildRequestDetails(params, url) {
+            const cleanParams = { ...params, accessToken: '[HIDDEN]' };
+            return `
+                <div class="collapsible-section">
+                    <button type="button" class="collapsible" onclick="toggleCollapsible(this)">
+                        📋 View Request Details
+                    </button>
+                    <div class="collapsible-content">
+                        <div class="request-details">
+<strong>Request URL:</strong>
+${url.replace(/Bearer\s+[^&]+/, 'Bearer [HIDDEN]')}
+
+<strong>Method:</strong> GET
+<strong>Headers:</strong>
+Authorization: Bearer [HIDDEN]
+Accept: application/json
+Content-Type: application/json
+
+<strong>Query Parameters:</strong>
+${Object.entries(cleanParams)
+    .filter(([key, value]) => value && key !== 'accessToken')
+    .map(([key, value]) => `${key}: ${value}`)
+    .join('<br>')}
+
+<strong>Request Time:</strong> ${new Date().toISOString()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Collapsible logic for request details
+        function initializeCollapsibles() {
+            const collapsibles = document.getElementsByClassName('collapsible');
+            for (let i = 0; i < collapsibles.length; i++) {
+                collapsibles[i].onclick = function() {
+                    toggleCollapsible(this);
+                };
+            }
+        }
+
+        function toggleCollapsible(element) {
+            element.classList.toggle('active');
+            const content = element.nextElementSibling;
+            if (content) {
+                if (content.classList.contains('active')) {
+                    content.classList.remove('active');
+                    element.textContent = element.textContent.replace('🔽', '📋');
+                } else {
+                    content.classList.add('active');
+                    element.textContent = element.textContent.replace('📋', '🔽');
+                }
+            }
+        }
+
+        // Keyboard shortcuts for form and results
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                fetchUserActivity();
+            }
+            
+            // Escape to clear results
+            if (e.key === 'Escape') {
+                const resultsDiv = document.getElementById('results');
+                if (resultsDiv.innerHTML.trim()) {
+                    if (confirm('Clear current results?')) {
+                        resultsDiv.innerHTML = '';
+                    }
+                }
+            }
+        });
+        // Tooltips for form fields
+        function addTooltips() {
+            const tooltips = {
+                'accessToken': 'Get this from your GoTo Connect admin portal under API settings',
+                'startDate': 'Reports will include activity from this date onwards',
+                'endDate': 'Reports will include activity up to this date',
+                'organizationId': 'Leave empty to get data for your default organization',
+                'pageSize': 'Larger sizes mean fewer API calls but longer response times'
+            };
+            
+            Object.entries(tooltips).forEach(([fieldId, tooltip]) => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.title = tooltip;
+                }
+            });
+        }
+
+        // Initialize tooltips when page loads
+        document.addEventListener('DOMContentLoaded', addTooltips);
+
+        // Form reset functionality
+        function resetForm() {
+            if (confirm('Reset all form fields to default values?')) {
+                document.getElementById('accessToken').value = '';
+                document.getElementById('organizationId').value = '';
+                document.getElementById('userId').value = '';
+                document.getElementById('departmentId').value = '';
+                document.getElementById('siteId').value = '';
+                document.getElementById('pageSize').value = '100';
+                document.getElementById('pageNumber').value = '1';
+                document.getElementById('sortBy').value = '';
+                document.getElementById('sortOrder').value = 'asc';
+                document.getElementById('includeInactive').value = '';
+                document.getElementById('timeZone').value = '';
+                
+                // Reset dates to last 30 days
+                const endDate = new Date();
+                const startDate = new Date();
+                startDate.setDate(startDate.getDate() - 30);
+                
+                document.getElementById('endDate').value = endDate.toISOString().split('T')[0];
+                document.getElementById('startDate').value = startDate.toISOString().split('T')[0];
+                
+                // Clear results
+                document.getElementById('results').innerHTML = '';
+                
+                // Reset field styling
+                document.querySelectorAll('.required-field').forEach(field => {
+                    field.style.borderLeft = '3px solid #dc3545';
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const resetButton = document.createElement('button');
+            resetButton.innerHTML = '🔄 Reset Form';
+            resetButton.style.background = '#6c757d';
+            resetButton.style.marginLeft = '10px';
+            resetButton.onclick = resetForm;
+            
+            const fetchButton = document.getElementById('fetchButton');
+            fetchButton.parentElement.appendChild(resetButton);
+        });
+
+        // Export to CSV functionality
+        function exportToCSV(data) {
+            if (!data || !data.items || data.items.length === 0) {
+                alert('No data available to export');
+                return;
+            }
+            
+            const headers = ['User Name', 'User ID', 'Total Calls', 'Inbound Calls', 'Outbound Calls', 'Total Duration (min)', 'Last Activity'];
+            const csvContent = [
+                headers.join(','),
+                ...data.items.map(item => [
+                    `"${item.userName || 'N/A'}"`,
+                    `"${item.userId || 'N/A'}"`,
+                    item.totalCalls || 0,
+                    item.inboundCalls || 0,
+                    item.outboundCalls || 0,
+                    Math.round((item.totalDuration || 0) / 60),
+                    `"${item.lastActivity ? new Date(item.lastActivity).toLocaleString() : 'N/A'}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `user-activity-report-${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Add export button after results
+        function addExportButton(data) {
+            const exportButton = document.createElement('button');
+            exportButton.innerHTML = '📊 Export to CSV';
+            exportButton.style.marginLeft = '10px';
+            exportButton.style.background = '#17a2b8';
+            exportButton.onclick = () => exportToCSV(data);
+            const fetchButton = document.getElementById('fetchButton');
+            fetchButton.parentElement.appendChild(exportButton);
+        }
+
+        // Enhanced logging for debugging
+        function logDebugInfo(step, data) {
+            if (window.location.search.includes('debug=true')) {
+                console.group(`🐛 Debug: ${step}`);
+                console.log('Timestamp:', new Date().toISOString());
+                console.log('Data:', data);
+                console.groupEnd();
+            }
+        }
+
+        // Performance monitoring
+        let performanceStart;
+        function startPerformanceMonitoring() {
+            performanceStart = performance.now();
+        }
+        function endPerformanceMonitoring() {
+            if (performanceStart) {
+                const duration = performance.now() - performanceStart;
+                console.log(`⚡ API Request completed in ${Math.round(duration)}ms`);
+                // Show performance info in results
+                const perfInfo = document.createElement('small');
+                perfInfo.style.color = '#6c757d';
+                perfInfo.style.display = 'block';
+                perfInfo.style.marginTop = '10px';
+                perfInfo.innerHTML = `Request completed in ${Math.round(duration)}ms`;
+                const resultsDiv = document.getElementById('results');
+                if (
+                    resultsDiv.firstChild &&
+                    resultsDiv.firstChild.nodeType === Node.ELEMENT_NODE
+                ) {
+                    resultsDiv.firstChild.appendChild(perfInfo);
+                } else {
+                    resultsDiv.appendChild(perfInfo);
+                }
+            }
+        }
+        // Wrap fetchUserActivity for performance logging
+        const originalFetchUserActivity = fetchUserActivity;
+        fetchUserActivity = async function() {
+            startPerformanceMonitoring();
+            logDebugInfo('Starting API Request', getAllFormParameters());
+            try {
+                await originalFetchUserActivity();
+            } finally {
+                endPerformanceMonitoring();
+            }
+        };
+
+        // Console log for successful load and debug info
+        console.log('🚀 GoTo Connect User Activity Report loaded successfully!');
+        console.log('💡 Add ?debug=true to URL for enhanced debugging');
+        console.log('⌨️ Keyboard shortcuts: Ctrl+Enter (submit), Escape (clear results)');
+    </script>
+</body>
+</html>
