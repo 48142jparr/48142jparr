@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Admin - Recent Errors</title>
+<style>body{font-family:Arial,Helvetica,sans-serif;padding:16px}pre{background:#f4f4f4;border-radius:6px;padding:12px;overflow:auto}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ddd;padding:8px}th{background:#eee}</style>
+</head><body>
+<h1>Admin: Recent Server Errors</h1>
+<p>This page polls <code>/debug/recent-errors</code> every 5s and displays the last 100 recorded errors.</p>
+<div><label>Auto-refresh: <input id="autorefresh" type="checkbox" checked></label> <button id="refresh">Refresh</button></div>
+<div id="count">Loading…</div>
+<table id="errorsTable"><thead><tr><th>Time</th><th>Context</th><th>Message</th><th>Details</th></tr></thead><tbody></tbody></table>
+<pre id="raw"></pre>
+<script>
+async function loadErrors(){
+  try{
+    const r = await fetch('/debug/recent-errors');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j = await r.json();
+    document.getElementById('count').textContent = 'Total recorded errors: '+j.count;
+    const tbody = document.querySelector('#errorsTable tbody'); tbody.innerHTML = '';
+    (j.errors||[]).forEach(e=>{
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${e.ts}</td><td>${e.context}</td><td>${escapeHtml(e.message)}</td><td><pre style="white-space:pre-wrap">${escapeHtml(JSON.stringify(e.details||'',null,2))}</pre></td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('raw').textContent = JSON.stringify(j, null, 2);
+  }catch(err){ document.getElementById('raw').textContent = 'Error: '+err.message; }
+}
+function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+loadErrors();
+setInterval(()=>{ if(document.getElementById('autorefresh').checked) loadErrors(); }, 5000);
+document.getElementById('refresh').addEventListener('click', loadErrors);
+</script>
+</body></html>

@@ -30,7 +30,18 @@
     <input type="text" id="accountKey" placeholder="Account Key">
     <label for="phoneNumber">Phone Number</label>
     <select id="phoneNumber"></select>
-    <button id="fetchBtn">Fetch Phone Number</button>
+    <div style="display:flex;gap:8px;">
+      <button id="fetchBtn">Fetch Phone Number</button>
+      <button id="exportBtn">Export CSV</button>
+    </div>
+    <div style="margin-top:8px; display:flex;gap:8px; align-items:center;">
+      <label style="margin:0;">Page:</label>
+      <button id="pagePrev">Prev</button>
+      <span id="pageDisplay">1</span>
+      <button id="pageNext">Next</button>
+      <label style="margin-left:12px;">Page Size:</label>
+      <select id="pageSizeSelect"><option>10</option><option selected>50</option><option>100</option><option>500</option></select>
+    </div>
     <div class="debug" id="debugWindow"></div>
     <div id="results"></div>
   </div>
@@ -114,29 +125,72 @@
       }
     }
 
+    // New helper: escape HTML for safe pre text rendering
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
     // New helper: fetch numbers and fill dropdown — does not touch accounts selector
     async function fetchAndFillNumbers(accountKeyToUse){
       try {
         const url = accountKeyToUse ? `/phone-numbers-summary?accountKey=${encodeURIComponent(accountKeyToUse)}` : '/phone-numbers-summary';
         const phoneResp = await fetch(url);
-        if (!phoneResp.ok) { document.getElementById('debugWindow').textContent = 'Failed to load phone numbers: ' + phoneResp.status; return; }
-        const payload = await phoneResp.json();
-        const numbers = payload.phoneNumbers || payload || [];
         const phoneSelect = document.getElementById('phoneNumber');
         phoneSelect.innerHTML = '';
+
+        if (!phoneResp.ok) {
+          // Try to parse JSON response body for details, fall back to text
+          let detailsText = '';
+          try { const j = await phoneResp.json(); detailsText = JSON.stringify(j, null, 2); } catch (e) { detailsText = await phoneResp.text(); }
+          const msg = `Failed to load phone numbers: HTTP ${phoneResp.status}`;
+          document.getElementById('debugWindow').textContent = msg + '\n' + detailsText;
+          document.getElementById('results').innerHTML = `<div class="alert">${escapeHtml(msg)}<pre>${escapeHtml(detailsText)}</pre></div>`;
+          return;
+        }
+
+        const payload = await phoneResp.json();
+        const numbers = payload.phoneNumbers || payload || [];
+        const phoneSelect2 = document.getElementById('phoneNumber');
+        phoneSelect2.innerHTML = '';
         numbers.forEach(n => {
           const option = document.createElement('option');
           const numVal = n.phoneNumber || n.number || '';
           option.value = numVal;
           option.textContent = numVal + (n.callerId ? ' (' + n.callerId + ')' : '');
-          phoneSelect.appendChild(option);
+          phoneSelect2.appendChild(option);
         });
-        // display account used
         const acctInfo = payload.accountDisplay || payload.accountKey || (accountKeyToUse || '');
         document.getElementById('debugWindow').textContent = `Loaded ${numbers.length} numbers for account: ${acctInfo} (source: ${payload.source || 'unknown'})`;
+        document.getElementById('results').innerHTML = '';
+        return payload;
       } catch (err) {
-        document.getElementById('debugWindow').textContent = 'Error loading numbers: ' + err.message;
+        // err may be a network/fetch error or thrown object; try to present useful info
+        let details = err && err.message ? err.message : String(err);
+        if (err && err.details) {
+          try { details += '\n' + JSON.stringify(err.details, null, 2); } catch (e) { details += '\n' + String(err.details); }
+        }
+        document.getElementById('debugWindow').textContent = 'Error loading numbers: ' + details;
+        document.getElementById('results').innerHTML = `<div class="alert">Error loading numbers: <pre>${escapeHtml(details)}</pre></div>`;
+        return null;
       }
+    }
+
+    // Export current numbers to CSV and display as table
+    function buildCsvFromNumbers(numbers) {
+      const rows = [['phoneNumber','callerId']];
+      numbers.forEach(n => {
+        rows.push([n.phoneNumber || n.number || '', n.callerId || '']);
+      });
+      return rows.map(r => r.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
+    }
+
+    function renderNumbersTable(numbers) {
+      if (!numbers || numbers.length === 0) return '<div class="empty">No numbers to display</div>';
+      let html = '<table><thead><tr><th>Phone Number</th><th>Caller ID</th></tr></thead><tbody>';
+      numbers.forEach(n => { html += `<tr><td>${escapeHtml(n.phoneNumber || n.number || '')}</td><td>${escapeHtml(n.callerId || '')}</td></tr>`; });
+      html += '</tbody></table>';
+      return html;
     }
 
     window.addEventListener('DOMContentLoaded', async ()=>{
@@ -155,6 +209,81 @@
       document.getElementById('fetchBtn').disabled = false;
       document.getElementById('fetchBtn').textContent = 'Fetch Phone Number';
     });
+
+    // Fetch page of persisted DB rows
+    async function fetchDbPage(accountKey, page, pageSize) {
+      const params = new URLSearchParams();
+      if (accountKey) params.append('accountKey', accountKey);
+      params.append('page', page);
+      params.append('pageSize', pageSize);
+      const resp = await fetch('/db/phone-numbers?' + params.toString());
+      if (!resp.ok) throw new Error('DB request failed: ' + resp.status);
+      return resp.json();
+    }
+
+    async function loadPageToUi(page) {
+      const accountSel = document.getElementById('accountKeySelect');
+      const accountKeyToUse = accountSel ? accountSel.value : (document.getElementById('accountKey') ? document.getElementById('accountKey').value : '');
+      const pageSize = parseInt(document.getElementById('pageSizeSelect').value, 10) || 50;
+      try {
+        const data = await fetchDbPage(accountKeyToUse, page, pageSize);
+        document.getElementById('pageDisplay').textContent = data.page;
+        const rows = data.rows || [];
+        document.getElementById('results').innerHTML = renderNumbersTable(rows.map(r=>({ phoneNumber: r.number, callerId: r.callerIdName || r.callerId || '' })));
+        // store last loaded page in a data attribute for export convenience
+        document.getElementById('results').dataset.lastAccount = accountKeyToUse || '';
+        document.getElementById('results').dataset.lastPage = data.page;
+        document.getElementById('results').dataset.lastPageSize = data.pageSize;
+      } catch (e) {
+        document.getElementById('results').innerHTML = `<div class="alert">Error loading page: ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    document.getElementById('pagePrev').addEventListener('click', async ()=>{
+      const cur = parseInt(document.getElementById('pageDisplay').textContent || '1', 10) || 1;
+      if (cur <= 1) return;
+      await loadPageToUi(cur - 1);
+    });
+    document.getElementById('pageNext').addEventListener('click', async ()=>{
+      const cur = parseInt(document.getElementById('pageDisplay').textContent || '1', 10) || 1;
+      await loadPageToUi(cur + 1);
+    });
+    document.getElementById('pageSizeSelect').addEventListener('change', async ()=>{
+      await loadPageToUi(1);
+    });
+
+    // Export all pages from DB by iterating server-side pages
+    document.getElementById('exportBtn').addEventListener('click', async () => {
+      const accountKeyToUse = document.getElementById('results').dataset.lastAccount || '';
+      const pageSize = parseInt(document.getElementById('pageSizeSelect').value, 10) || 50;
+      document.getElementById('exportBtn').disabled = true; document.getElementById('exportBtn').textContent = 'Exporting...';
+      try {
+        // First fetch first page to get total
+        const first = await fetchDbPage(accountKeyToUse, 1, pageSize);
+        const total = first.total || 0;
+        const pages = Math.max(1, Math.ceil(total / pageSize));
+        let allRows = first.rows || [];
+        for (let p = 2; p <= pages; p++) {
+          const pg = await fetchDbPage(accountKeyToUse, p, pageSize);
+          allRows = allRows.concat(pg.rows || []);
+        }
+        const numbers = allRows.map(r => ({ phoneNumber: r.number, callerId: r.callerIdName || r.callerId || '' }));
+        document.getElementById('results').innerHTML = renderNumbersTable(numbers);
+        const csv = buildCsvFromNumbers(numbers);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const fname = `phone-numbers-${accountKeyToUse || 'all'}.csv`;
+        a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      } catch (e) {
+        document.getElementById('results').innerHTML = `<div class="alert">Export failed: ${escapeHtml(e.message)}</div>`;
+      } finally {
+        document.getElementById('exportBtn').disabled = false; document.getElementById('exportBtn').textContent = 'Export CSV';
+      }
+    });
+
+    // Initialize page state
+    document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('pageDisplay').textContent = '1'; });
   </script>
 </body>
 </html>

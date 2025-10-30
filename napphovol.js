@@ -74,16 +74,63 @@ function saveNumbersToDb(numbers, accountKey) {
   });
 }
 
+// Generic helper: fetch all paginated items from a Voice Admin / related endpoint.
+// Supports page/pageSize or pageMarker-like pagination and common response shapes.
+async function fetchAllFromUrl(url, accessToken, initialParams = {}) {
+  const all = [];
+  const DEFAULT_PAGE_SIZE = 50; // Voice Admin maximum page size is typically 50
+  const MAX_PAGE_SIZE = 50;
+  const requested = parseInt(initialParams.pageSize || DEFAULT_PAGE_SIZE, 10) || DEFAULT_PAGE_SIZE;
+  const pageSize = Math.min(requested, MAX_PAGE_SIZE);
+  let params = Object.assign({}, initialParams, { page: 1, pageSize });
+  let pageMarker = null;
+  try {
+    while (true) {
+      const resp = await axios.get(url, { headers: { Authorization: `Bearer ${accessToken}` }, params });
+      // Determine items array in common response shapes
+      let items = [];
+      if (Array.isArray(resp.data)) {
+        items = resp.data;
+      } else if (Array.isArray(resp.data.items)) {
+        items = resp.data.items;
+      } else if (Array.isArray(resp.data.phoneNumbers)) {
+        items = resp.data.phoneNumbers;
+      } else if (Array.isArray(resp.data.items?.phoneNumbers)) {
+        items = resp.data.items.phoneNumbers;
+      }
+      all.push(...items);
+
+      // Detect token/marker-based pagination
+      pageMarker = resp.data.nextPageToken || resp.data.nextPageMarker || resp.data.nextMarker || resp.data.pageMarker || null;
+      if (pageMarker) {
+        // pass marker for next request (common param names vary)
+        params = Object.assign({}, initialParams, { pageMarker, pageSize });
+        continue;
+      }
+
+      // Fallback: if less than pageSize items returned, assume last page
+      if (items.length < pageSize) break;
+
+      // Otherwise increment page and loop
+      params.page = (params.page || 1) + 1;
+    }
+    return all;
+  } catch (err) {
+    // Let caller handle error, but log details here
+    logAxiosError(err, `fetchAllFromUrl ${url}`);
+    throw err;
+  }
+}
+
 // Fetch numbers for an accountKey and persist to DB
 async function fetchAndPersistNumbers(accountKey) {
   if (!accountKey) throw new Error('Missing accountKey');
   const accessToken = latestAccessToken;
   if (!accessToken) throw new Error('No access token');
-  const url = `https://api.goto.com/voice-admin/v1/phone-numbers?accountKey=${accountKey}`;
-  console.log('Scheduled fetch: calling', url);
+  const url = `https://api.goto.com/voice-admin/v1/phone-numbers`;
+  console.log('Scheduled fetch: calling', url, 'accountKey=', accountKey);
   try {
-    const resp = await axios.get(url, { headers: { Authorization: `Bearer ${accessToken}` } });
-    const numbers = resp.data.items || [];
+    const numbers = await fetchAllFromUrl(url, accessToken, { accountKey });
     console.log(`Scheduled fetch: fetched ${numbers.length} numbers for ${accountKey}`);
     try {
       const dbRes = await saveNumbersToDb(numbers, accountKey);
@@ -94,7 +141,7 @@ async function fetchAndPersistNumbers(accountKey) {
       return { fetched: numbers.length, saved: 0, dbError: dbErr.message };
     }
   } catch (err) {
-    console.error('Scheduled fetch: API error', err && err.message, err.response?.data);
+    console.error('Scheduled fetch: API error', err && err.message);
     throw err;
   }
 }
@@ -130,6 +177,70 @@ function decodeJwtPayload(token) {
   } catch (e) {
     return null;
   }
+}
+
+// Error monitoring: record recent errors and provide debug endpoint
+const recentErrors = [];
+function recordError(context, err) {
+  try {
+    const entry = {
+      ts: new Date().toISOString(),
+      context: context || 'unknown',
+      message: err && err.message ? err.message : String(err),
+      details: err && err.response && err.response.data ? err.response.data : (err && err.details ? err.details : null)
+    };
+    recentErrors.unshift(entry);
+    if (recentErrors.length > 200) recentErrors.pop();
+    try {
+      fs.appendFileSync(path.join(__dirname, 'server.log'), JSON.stringify(entry) + '\n');
+    } catch (fsErr) {
+      console.error('Failed to write server.log:', fsErr && fsErr.message);
+    }
+  } catch (e) {
+    console.error('recordError failed:', e && e.message);
+  }
+}
+
+// Sanitize request query parameters for pagination & pageSize before forwarding to external APIs
+function sanitizeQueryParams(req) {
+  if (!req || !req.query) return;
+  // sanitize pageSize if present
+  if (req.query.pageSize !== undefined) {
+    let ps = parseInt(req.query.pageSize, 10);
+    if (Number.isNaN(ps)) ps = undefined;
+    if (ps !== undefined) {
+      // clamp to safe range
+      const min = 1;
+      const max = 50; // match voice-admin limits
+      ps = Math.max(min, Math.min(max, ps));
+      req.query.pageSize = String(ps);
+    }
+  }
+  if (req.query.page !== undefined) {
+    let p = parseInt(req.query.page, 10);
+    if (Number.isNaN(p) || p < 1) p = 1;
+    req.query.page = String(p);
+  }
+}
+
+// Patch logAxiosError to also record errors for monitoring
+function logAxiosError(err, context) {
+  try {
+    console.error(`API ERROR (${context}):`, err && err.message);
+    if (err && err.response) {
+      console.error(`Status: ${err.response.status}`);
+      try { console.error('Response headers:', JSON.stringify(err.response.headers).slice(0,1000)); } catch (e) {}
+      try { console.error('Response data:', JSON.stringify(err.response.data).slice(0,2000)); } catch (e) { console.error('Response data (raw):', err.response.data); }
+    } else if (err && err.request) {
+      console.error('No response received, request info:', err.request && err.request._currentUrl ? err.request._currentUrl : '[request object]');
+    } else {
+      console.error('Axios error (no response):', err);
+    }
+  } catch (logErr) {
+    console.error('Failed to log axios error:', logErr && logErr.message);
+  }
+  // record for monitoring
+  try { recordError(context, err); } catch (e) { console.error('Failed to record error:', e && e.message); }
 }
 
 // Serve static frontend files
@@ -170,6 +281,7 @@ function getOrgId() {
 
 // Endpoint to fetch and print all phone numbers and caller ID info from GoTo Admin API
 app.get("/fetch-all-phone-numbers", async (req, res) => {
+  sanitizeQueryParams(req);
   const accessToken = latestAccessToken;
   if (!accessToken) {
     res.status(401).send("No access token. Please authenticate first.");
@@ -246,6 +358,7 @@ app.get("/fetch-all-phone-numbers", async (req, res) => {
 
 // Endpoint to fetch all phone numbers and caller ID from Voice Admin API, and call volume from Call Reports API
 app.get("/phone-numbers-summary", async (req, res) => {
+  sanitizeQueryParams(req);
   const accessToken = latestAccessToken;
   if (!accessToken) return res.status(401).send("No access token. Please authenticate first.");
 
@@ -256,13 +369,21 @@ app.get("/phone-numbers-summary", async (req, res) => {
     // If explicit accountKey provided (query param or env), prefer that and call voice-admin by accountKey
     if (overrideAccountKey) {
       console.log('/phone-numbers-summary: using override accountKey', overrideAccountKey);
-      const numbersUrl = `https://api.goto.com/voice-admin/v1/phone-numbers?accountKey=${overrideAccountKey}`;
-      const numbersResp = await axios.get(numbersUrl, { headers: { Authorization: `Bearer ${accessToken}` } });
-      const numbers = numbersResp.data.items || [];
-      // persist in background
-      saveNumbersToDb(numbers, overrideAccountKey).catch(e => console.error('DB save error:', e && e.message));
-      const simple = (numbers || []).map(n => ({ phoneNumber: n.number || n.phoneNumber, callerId: n.callerIdName || n.callerId?.name || null }));
-      return res.json({ source: 'accountKey', accountKey: overrideAccountKey, accountDisplay: null, phoneNumbers: simple });
+      const numbersUrl = `https://api.goto.com/voice-admin/v1/phone-numbers`;
+      try {
+        // Do not forward client pageSize; fetchAllFromUrl clamps pageSize internally
+        const numbers = await fetchAllFromUrl(numbersUrl, accessToken, { accountKey: overrideAccountKey });
+        // persist in background
+        saveNumbersToDb(numbers, overrideAccountKey).catch(e => { logAxiosError(e, 'DB save error'); });
+        const simple = (numbers || []).map(n => ({ phoneNumber: n.number || n.phoneNumber, callerId: n.callerIdName || n.callerId?.name || null }));
+        return res.json({ source: 'accountKey', accountKey: overrideAccountKey, accountDisplay: null, phoneNumbers: simple });
+      } catch (err) {
+        // Improved logging and return detailed error to frontend for debugging
+        logAxiosError(err, 'voice-admin phone-numbers (accountKey)');
+        const status = err.response?.status || 500;
+        const details = err.response?.data || { message: err.message };
+        return res.status(status).json({ error: 'Voice Admin phone-numbers error', details });
+      }
     }
 
     // If org id available, try org-based path (may return different account) — prefer explicit selection but org path is useful
@@ -275,8 +396,7 @@ app.get("/phone-numbers-summary", async (req, res) => {
         if (accounts.length > 0) {
           const accountId = accounts[0].id;
           const numbersUrl = `https://api.goto.com/voice-admin/v1/accounts/${accountId}/phone-numbers`;
-          const numbersResp = await axios.get(numbersUrl, { headers: { Authorization: `Bearer ${accessToken}` } });
-          const numbers = numbersResp.data.phoneNumbers || [];
+          const numbers = await fetchAllFromUrl(numbersUrl, accessToken, {});
           const acctDisplay = accounts[0].displayName || accounts[0].name || accounts[0].id || null;
           const simple = (numbers || []).map(n => ({ phoneNumber: n.phoneNumber || n.number, callerId: n.callerId?.name || n.callerIdName || null }));
           return res.json({ source: 'org', accountKey: accountId, accountDisplay: acctDisplay, phoneNumbers: simple });
@@ -305,11 +425,10 @@ app.get("/phone-numbers-summary", async (req, res) => {
       console.log('Unable to determine accountKey from SCIM accounts', accountsArr);
       return res.status(404).send('No accountKey found via SCIM accounts');
     }
-    // Call voice-admin by accountKey
-    const numbersUrl = `https://api.goto.com/voice-admin/v1/phone-numbers?accountKey=${accountKey}`;
+    // Call voice-admin by accountKey (paginated)
+    const numbersUrl = `https://api.goto.com/voice-admin/v1/phone-numbers`;
     console.log('SCIM fallback: calling Voice Admin phone-numbers URL:', numbersUrl);
-    const numbersResp = await axios.get(numbersUrl, { headers: { Authorization: `Bearer ${accessToken}` } });
-    const numbers = numbersResp.data.items || [];
+    const numbers = await fetchAllFromUrl(numbersUrl, accessToken, { accountKey });
     // Persist numbers async
     saveNumbersToDb(numbers, accountKey).catch(e => console.error('DB save error (phone-numbers-summary fallback):', e && e.message));
     const simple = (numbers || []).map(n => ({ phoneNumber: n.number || n.phoneNumber, callerId: n.callerIdName || n.callerId?.name || null }));
@@ -833,15 +952,26 @@ app.get('/list-scim-accounts', async (req, res) => {
   }
 });
 
-// Endpoint to read persisted phone numbers from DB
+// Endpoint to read persisted phone numbers from DB (with server-side pagination)
 app.get('/db/phone-numbers', (req, res) => {
   const qAccount = req.query.accountKey || req.query.account || null;
+  const page = Math.max(1, parseInt(req.query.page || '1', 10) || 1);
+  const pageSize = Math.max(1, Math.min(1000, parseInt(req.query.pageSize || '50', 10) || 50));
+  const offset = (page - 1) * pageSize;
   const params = [];
-  let sql = 'SELECT * FROM phone_numbers';
-  if (qAccount) { sql += ' WHERE accountKey = ?'; params.push(qAccount); }
-  db.all(sql, params, (err, rows) => {
+  let where = '';
+  if (qAccount) { where = ' WHERE accountKey = ?'; params.push(qAccount); }
+
+  // First get total count matching filter
+  db.get('SELECT COUNT(*) as total FROM phone_numbers' + where, params, (err, row) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json({ count: rows.length, rows });
+    const total = row && row.total ? row.total : 0;
+    const sql = 'SELECT * FROM phone_numbers' + where + ' ORDER BY number LIMIT ? OFFSET ?';
+    const qparams = params.concat([pageSize, offset]);
+    db.all(sql, qparams, (err2, rows) => {
+      if (err2) return res.status(500).json({ error: err2.message });
+      res.json({ total, count: rows.length, page, pageSize, rows });
+    });
   });
 });
 
@@ -941,6 +1071,18 @@ app.post('/debug/clear-state', (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// New endpoint to return recent recorded errors for monitoring
+app.get('/debug/recent-errors', (req, res) => {
+  res.json({ count: recentErrors.length, errors: recentErrors.slice(0, 100) });
+});
+
+// Periodic monitor: log count of recent errors every minute
+setInterval(() => {
+  if (recentErrors.length > 0) {
+    console.warn(`Recent errors count: ${recentErrors.length}. Latest: ${recentErrors[0].ts} ${recentErrors[0].context} ${recentErrors[0].message}`);
+  }
+}, 60 * 1000);
 
 app.listen(5000, () => {
   console.log("Visit http://localhost:5000/auth to start the OAuth flow.");
