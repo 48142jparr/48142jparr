@@ -11,7 +11,7 @@ require('dotenv').config(); // Load .env
 
 // Ensure Express app and token helpers are defined
 const app = express();
-const SCOPE = "voice-admin.v1.read"; // scope used for OAuth and API access
+const SCOPE = "cr.v1.read voicemail.v1.voicemails.read voice-admin.v1.read"; // Request call-reports (cr.v1.read), voicemail and voice-admin scopes
 let expectedState = null;
 let latestAccessToken = null;
 let latestRefreshToken = null;
@@ -272,6 +272,22 @@ app.get("/login/oauth2/code/goto", async (req, res) => {
   } catch (err) {
     res.status(500).send(err.message);
   }
+});
+
+// Expose latest access token (useful for UI scripts to auto-populate token)
+app.get('/api/latest-access-token', (req, res) => {
+  if (latestAccessToken) {
+    return res.json({ accessToken: latestAccessToken });
+  }
+  return res.status(404).json({ error: 'No access token available' });
+});
+
+// Expose useful env vars to the frontend
+app.get('/api/env-vars', (req, res) => {
+  res.json({
+    organizationalId: process.env.ORGANIZATIONALID || '',
+    accountKey: process.env.ACCOUNTKEY || ''
+  });
 });
 
 // Helper to get org ID from .env

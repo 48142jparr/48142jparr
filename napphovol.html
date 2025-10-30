@@ -33,6 +33,7 @@
     <div style="display:flex;gap:8px;">
       <button id="fetchBtn">Fetch Phone Number</button>
       <button id="exportBtn">Export CSV</button>
+      <button id="loadActivityBtn">Load Phone Activity</button>
     </div>
     <div style="margin-top:8px; display:flex;gap:8px; align-items:center;">
       <label style="margin:0;">Page:</label>
@@ -44,6 +45,7 @@
     </div>
     <div class="debug" id="debugWindow"></div>
     <div id="results"></div>
+    <div id="activityResults" style="margin-top:18px"></div>
   </div>
   <script>
     async function fetchScimAccounts(){
@@ -284,6 +286,77 @@
 
     // Initialize page state
     document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('pageDisplay').textContent = '1'; });
+
+    // Quick client integration: load saved phone number activity JSON and render table/totals
+    async function loadPhoneActivity() {
+      const target = document.getElementById('activityResults');
+      target.innerHTML = '<div class="debug">Loading phone activity...</div>';
+      try {
+        const resp = await fetch('/phone_number_activity_2025-10-30.json');
+        if (!resp.ok) throw new Error('Failed to load JSON: ' + resp.status);
+        const data = await resp.json();
+        const items = data.items || [];
+        const totals = renderActivityTotals(items);
+        renderActivityTable(items);
+        target.scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        target.innerHTML = `<div class="alert">Error loading activity: ${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    function renderActivityTotals(items) {
+      let inSum = 0, outSum = 0, totalDuration = 0;
+      for (const it of items) {
+        inSum += (it.dataValues?.inboundVolume || 0);
+        outSum += (it.dataValues?.outboundVolume || 0);
+        totalDuration += (it.dataValues?.totalDuration || 0);
+      }
+      const target = document.getElementById('activityResults');
+      const html = `<div id="activityTotals" style="font-weight:600;margin-top:8px">Totals — Inbound: ${inSum}  Outbound: ${outSum}  TotalDuration(ms): ${totalDuration}</div>`;
+      target.innerHTML = html;
+      return { inSum, outSum, totalDuration };
+    }
+
+    function renderActivityTable(items) {
+      const target = document.getElementById('activityResults');
+      let html = target.innerHTML || '';
+      html += '<table id="activityTable"><thead><tr><th>Phone</th><th>Name</th><th>Inbound</th><th>Outbound</th><th>TotalDuration(ms)</th></tr></thead><tbody>';
+      for (const it of items) {
+        const phone = escapeHtml(it.phoneNumber || '');
+        const name = escapeHtml(it.phoneNumberName || it.phoneNumberId || '');
+        const inV = it.dataValues?.inboundVolume || 0;
+        const outV = it.dataValues?.outboundVolume || 0;
+        const dur = it.dataValues?.totalDuration || 0;
+        html += `<tr><td>${phone}</td><td>${name}</td><td>${inV}</td><td>${outV}</td><td>${dur}</td></tr>`;
+      }
+      html += '</tbody></table>';
+      // attach export button for this activity view
+      html += '<div style="margin-top:8px"><button id="exportActivityBtn">Export Activity CSV</button></div>';
+      target.innerHTML = html;
+      const btn = document.getElementById('exportActivityBtn');
+      if (btn) btn.addEventListener('click', ()=> exportActivityCsv(items));
+    }
+
+    function exportActivityCsv(items) {
+      const rows = [['phoneNumber','phoneNumberName','inbound','outbound','totalDuration']];
+      items.forEach(it => rows.push([
+        it.phoneNumber || '',
+        it.phoneNumberName || it.phoneNumberId || '',
+        it.dataValues?.inboundVolume || 0,
+        it.dataValues?.outboundVolume || 0,
+        it.dataValues?.totalDuration || 0
+      ]));
+      const csv = rows.map(r => r.map(c => '"' + String(c).replace(/"/g,'""') + '"').join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'phone_activity_2025-10-30.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // wire the new button
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const btn = document.getElementById('loadActivityBtn');
+      if (btn) btn.addEventListener('click', loadPhoneActivity);
+    });
   </script>
 </body>
 </html>
