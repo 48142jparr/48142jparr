@@ -16,9 +16,11 @@ cd "$REPO_DIR"
 # Stage all changes
 git add .
 
+COMMITTED=false
 # Commit if there are changes
 if git commit -m "chore: snapshot $(date -u '+%Y-%m-%d %H:%M UTC')"; then
   echo "Committed changes"
+  COMMITTED=true
 else
   echo "No changes to commit"
 fi
@@ -27,6 +29,12 @@ fi
 TS=$(date -u '+%Y%m%d-%H%M')
 BRANCH_NAME="backup-$TS"
 TAG_NAME="snapshot-$TS"
+
+if [ "$COMMITTED" = "false" ]; then
+  echo "No commit created; skipping branch/tag creation and push"
+  echo "Snapshot skipped: no changes"
+  exit 0
+fi
 
 # Create branch if it doesn't exist
 if git rev-parse --verify "$BRANCH_NAME" >/dev/null 2>&1; then
