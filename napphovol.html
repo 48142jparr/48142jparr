@@ -23,7 +23,7 @@
   <div class="container">
     <h1>GoTo Phone Number Report</h1>
     <label for="accessToken">Access Token</label>
-    <input type="text" id="accessToken" placeholder="Paste your OAuth access token here">
+    <input type="password" id="accessToken" placeholder="Paste your OAuth access token here">
     <label for="organizationId">Organization ID</label>
     <input type="text" id="organizationId" placeholder="Organization ID">
     <label for="accountKey">Account Key (optional)</label>
@@ -35,6 +35,8 @@
     <input type="date" id="endDate" value="">
     <label for="phoneNumber">Phone Number</label>
     <select id="phoneNumber"></select>
+    <label for="nameFilter">Filter by Name</label>
+    <input type="text" id="nameFilter" placeholder="Type part of a name to filter activity and numbers">
     <div style="display:flex;gap:8px;">
       <button id="fetchBtn">Fetch Phone Number</button>
       <button id="exportBtn">Export CSV</button>
@@ -138,6 +140,52 @@
       return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    // State: last fetched items for client-side filtering
+    let lastActivityItems = [];
+    let lastNumbers = [];
+
+    // Apply name filter to both activity table and phone number select
+    function applyNameFilter() {
+      const nfEl = document.getElementById('nameFilter');
+      const q = (nfEl && nfEl.value) ? nfEl.value : '';
+      const ql = q.trim().toLowerCase();
+      // Filter phone number options
+      const phoneSelect = document.getElementById('phoneNumber');
+      if (phoneSelect && Array.isArray(lastNumbers)) {
+        phoneSelect.innerHTML = '';
+        const filtered = lastNumbers.filter(n => {
+          const name = (n.callerId || n.callerIdName || n.name || '').toString().toLowerCase();
+          const num = (n.phoneNumber || n.number || '').toString().toLowerCase();
+          return ql === '' || name.includes(ql) || num.includes(ql);
+        });
+        filtered.forEach(n => {
+          const option = document.createElement('option');
+          const numVal = n.phoneNumber || n.number || '';
+          option.value = numVal;
+          option.textContent = numVal + (n.callerId ? ' (' + n.callerId + ')' : (n.callerIdName ? ' (' + n.callerIdName + ')' : ''));
+          phoneSelect.appendChild(option);
+        });
+      }
+
+      // Filter activity table if we have loaded items
+      if (Array.isArray(lastActivityItems) && lastActivityItems.length > 0) {
+        const filteredAct = lastActivityItems.filter(it => {
+          // Candidate fields to match: phoneNumberName, callerIdName, callerId, phoneNumber
+          const nameFields = [it.phoneNumberName, it.phoneNumberId, it.callerIdName, it.callerId, it.phoneNumber];
+          for (const f of nameFields) {
+            if (!f) continue;
+            if (f.toString().toLowerCase().includes(ql)) return true;
+          }
+          // also check nested caller/callee names
+          if (it.calleeId && it.calleeId.name && it.calleeId.name.toString().toLowerCase().includes(ql)) return true;
+          if (it.callerId && it.callerId.name && it.callerId.name.toString().toLowerCase().includes(ql)) return true;
+          return ql === '';
+        });
+        renderActivityTotals(filteredAct);
+        renderActivityTable(filteredAct);
+      }
+    }
+
     // New helper: fetch numbers and fill dropdown — does not touch accounts selector
     async function fetchAndFillNumbers(accountKeyToUse){
       try {
@@ -158,6 +206,8 @@
 
         const payload = await phoneResp.json();
         const numbers = payload.phoneNumbers || payload || [];
+        // persist for client-side filtering
+        lastNumbers = numbers;
         const phoneSelect2 = document.getElementById('phoneNumber');
         phoneSelect2.innerHTML = '';
         numbers.forEach(n => {
@@ -167,6 +217,8 @@
           option.textContent = numVal + (n.callerId ? ' (' + n.callerId + ')' : '');
           phoneSelect2.appendChild(option);
         });
+        // apply any active name filter to reduce options immediately
+        applyNameFilter();
         const acctInfo = payload.accountDisplay || payload.accountKey || (accountKeyToUse || '');
         document.getElementById('debugWindow').textContent = `Loaded ${numbers.length} numbers for account: ${acctInfo} (source: ${payload.source || 'unknown'})`;
         document.getElementById('results').innerHTML = '';
@@ -347,6 +399,8 @@
         }
         const payload = await resp.json();
         const items = payload.items || [];
+        // store for filtering
+        lastActivityItems = items;
         if (!Array.isArray(items) || items.length === 0) {
           target.innerHTML = `<div class="debug">No activity found for account ${escapeHtml(accountKeyToUse)} in the selected date range.</div>`;
           return;
@@ -414,6 +468,14 @@
     document.addEventListener('DOMContentLoaded', ()=>{
       const btn = document.getElementById('loadActivityBtn');
       if (btn) btn.addEventListener('click', loadPhoneActivity);
+    });
+
+    // Hook up the name filter input to live filter
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const nf = document.getElementById('nameFilter');
+      if (nf) {
+        nf.addEventListener('input', ()=> applyNameFilter());
+      }
     });
   </script>
 </body>

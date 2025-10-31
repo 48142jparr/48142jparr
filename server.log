@@ -9,3 +9,11 @@ Visit http://localhost:5000/auth to start the OAuth flow.
 /phone-numbers-summary: using override accountKey 6631858758341135809
 /phone-numbers-summary: using override accountKey 5135667486273654284
 /phone-numbers-summary: using override accountKey 6631858758341135809
+{"ts":"2025-10-31T16:35:18.505Z","context":"fetchAllFromUrl https://api.goto.com/voice-admin/v1/phone-numbers","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:18.507Z","context":"voice-admin phone-numbers (accountKey)","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:22.714Z","context":"fetchAllFromUrl https://api.goto.com/voice-admin/v1/phone-numbers","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:22.715Z","context":"voice-admin phone-numbers (accountKey)","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:27.634Z","context":"fetchAllFromUrl https://api.goto.com/voice-admin/v1/phone-numbers","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:27.635Z","context":"voice-admin phone-numbers (accountKey)","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:39.724Z","context":"fetchAllFromUrl https://api.goto.com/voice-admin/v1/phone-numbers","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}
+{"ts":"2025-10-31T16:35:39.725Z","context":"voice-admin phone-numbers (accountKey)","message":"Request failed with status code 401","details":{"errorCode":"AUTHN_EXPIRED_TOKEN","message":"The supplied authentication token is expired."}}

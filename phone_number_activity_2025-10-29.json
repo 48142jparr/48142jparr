@@ -1,0 +1,1953 @@
+{
+  "meta": {
+    "accountKey": "6631858758341135809",
+    "organizationId": "120b70ae-a0fa-4f95-988b-24ddf77b1104",
+    "start": "2025-10-29",
+    "end": "2025-10-29",
+    "days": 2,
+    "fetchedAt": "2025-10-31T15:26:57.249Z"
+  },
+  "totals": {
+    "inbound": 966,
+    "outbound": 549,
+    "totalDuration": 216630000
+  },
+  "count": 129,
+  "items": [
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "785b0da1-ae3f-4a66-948a-7ced5498e7a4",
+      "phoneNumberName": "Christopher Dixon-Vance (Shared BDC)",
+      "phoneNumber": "+13123261209",
+      "dataValues": {
+        "inboundVolume": 8,
+        "inboundDuration": 1767000,
+        "outboundVolume": 16,
+        "outboundDuration": 1149000,
+        "averageDuration": 138857,
+        "volume": 24,
+        "totalDuration": 2916000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "786f8db3-eaed-4712-8cfa-f1d83b333cbc",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+18154778600",
+      "dataValues": {
+        "inboundVolume": 37,
+        "inboundDuration": 3919000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 111971,
+        "volume": 37,
+        "totalDuration": 3919000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7a24c74b-06d8-4ea4-b548-fe89a23cefc7",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728801",
+      "dataValues": {
+        "inboundVolume": 13,
+        "inboundDuration": 919000,
+        "outboundVolume": 17,
+        "outboundDuration": 1808000,
+        "averageDuration": 104884,
+        "volume": 30,
+        "totalDuration": 2727000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7ab137fb-ef2b-4ace-9f72-31125ba87e1d",
+      "phoneNumberName": "MaryFrances Scott (Shared BDC)",
+      "phoneNumber": "+18722995060",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 662000,
+        "outboundVolume": 45,
+        "outboundDuration": 1473000,
+        "averageDuration": 46413,
+        "volume": 51,
+        "totalDuration": 2135000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7c3a68cb-c768-4102-8492-51c056ba6b2a",
+      "phoneNumberName": "Beaver Dam GM Direct Parts#",
+      "phoneNumber": "+19208852767",
+      "dataValues": {
+        "inboundVolume": 9,
+        "inboundDuration": 2033000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 225888,
+        "volume": 9,
+        "totalDuration": 2033000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7ce68ec0-4dd4-4346-990e-a2d85c3bb5f4",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286848",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 134000,
+        "outboundVolume": 2,
+        "outboundDuration": 352000,
+        "averageDuration": 121500,
+        "volume": 4,
+        "totalDuration": 486000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7dc5582d-4b78-474b-b1f8-7b736582851b",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286861",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 167000,
+        "outboundVolume": 4,
+        "outboundDuration": 393000,
+        "averageDuration": 112000,
+        "volume": 5,
+        "totalDuration": 560000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7e6526df-be4a-4066-aead-7693a346feed",
+      "phoneNumberName": "St. Charles Chevrolet - Laura Adamson",
+      "phoneNumber": "+16306728933",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 2,
+        "outboundDuration": 502000,
+        "averageDuration": 251000,
+        "volume": 2,
+        "totalDuration": 502000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7f1fa774-dd45-4e59-a30a-07d527809573",
+      "phoneNumberName": "Beaver Dam GM - Elliott Wisniewski",
+      "phoneNumber": "+19206314788",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 10,
+        "outboundDuration": 499000,
+        "averageDuration": 55444,
+        "volume": 10,
+        "totalDuration": 499000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7f3d305e-9eba-41d5-bf75-1d298da1ccac",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+18722312950",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 145000,
+        "outboundVolume": 1,
+        "outboundDuration": 107000,
+        "averageDuration": 63000,
+        "volume": 4,
+        "totalDuration": 252000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7fad3047-be6a-4fba-984b-8bfa85fa52f4",
+      "phoneNumberName": "MKTG_GOOGADS_CHIG_BG",
+      "phoneNumber": "+13122351469",
+      "dataValues": {
+        "inboundVolume": 13,
+        "inboundDuration": 2581000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 198538,
+        "volume": 13,
+        "totalDuration": 2581000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7fb94211-652f-47f4-b808-7f9ba9c0bd0c",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286876",
+      "dataValues": {
+        "inboundVolume": 5,
+        "inboundDuration": 318000,
+        "outboundVolume": 15,
+        "outboundDuration": 2867000,
+        "averageDuration": 199062,
+        "volume": 20,
+        "totalDuration": 3185000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "82a30fb0-e287-4f92-9399-b1e02f5f1d2d",
+      "phoneNumberName": "MKTG_DLRWEB_BDGM_SERVICE",
+      "phoneNumber": "+19202127725",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 19000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 19000,
+        "volume": 1,
+        "totalDuration": 19000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "85d0bba3-7720-4295-a619-c229064d0b5b",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+17799947889",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 2,
+        "outboundDuration": 830000,
+        "averageDuration": 415000,
+        "volume": 2,
+        "totalDuration": 830000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "8763fe55-f772-41f4-829b-7dc337ace0aa",
+      "phoneNumberName": "MKTG_GBP_FORD_SERVICE",
+      "phoneNumber": "+19206305977",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 19000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 19000,
+        "volume": 1,
+        "totalDuration": 19000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "884c5419-1f8c-455a-9aa5-2e7c4c8c8cac",
+      "phoneNumberName": "Napleton Chevrolet Chicago Fax",
+      "phoneNumber": "+13122259121",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 40000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 40000,
+        "volume": 1,
+        "totalDuration": 40000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "895ce90d-f83e-4296-88a2-98ba0307f0b4",
+      "phoneNumberName": "Columbus Ford",
+      "phoneNumber": "+19206235250",
+      "dataValues": {
+        "inboundVolume": 4,
+        "inboundDuration": 1005000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 251250,
+        "volume": 4,
+        "totalDuration": 1005000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "899197a4-edfd-4f15-b3a5-e9d8336f1be8",
+      "phoneNumberName": "Beaver Dam GM - Alex Calarco",
+      "phoneNumber": "+19209449550",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 0,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 0,
+        "volume": 1,
+        "totalDuration": 0
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "89a81527-3d77-41e2-9b7e-6f713b039605",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286846",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 2,
+        "outboundDuration": 411000,
+        "averageDuration": 411000,
+        "volume": 2,
+        "totalDuration": 411000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "8cb3d2bb-defe-4e15-80ba-ef21fbf5dd1a",
+      "phoneNumberName": "MKTG_BING_CDJR",
+      "phoneNumber": "+19203066039",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 41000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 41000,
+        "volume": 1,
+        "totalDuration": 41000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "8dd29790-8777-403c-b2eb-7125614cc1ac",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+18154779794",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 351000,
+        "outboundVolume": 2,
+        "outboundDuration": 678000,
+        "averageDuration": 343000,
+        "volume": 4,
+        "totalDuration": 1029000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "8eea9cd6-1f8f-4537-8413-5274a2fec1b9",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286874",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 10000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 10000,
+        "volume": 1,
+        "totalDuration": 10000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "8fe00083-15cd-459f-88ca-6cc93eb84193",
+      "phoneNumberName": "MKTG_DLRWEB_CDJR_SERVICE",
+      "phoneNumber": "+19205572975",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 391000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 130333,
+        "volume": 3,
+        "totalDuration": 391000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "926b65d7-eb09-4f35-8f38-958f5ca40466",
+      "phoneNumberName": "Columbus Ford - David Thatcher",
+      "phoneNumber": "+19206305983",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 429000,
+        "outboundVolume": 5,
+        "outboundDuration": 1053000,
+        "averageDuration": 185250,
+        "volume": 8,
+        "totalDuration": 1482000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "92d88d31-9007-4e66-aaf4-7bfd52a43b79",
+      "phoneNumberName": "MKTG_APPLEMAPS_BDGM",
+      "phoneNumber": "+19203194047",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 930000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 310000,
+        "volume": 3,
+        "totalDuration": 930000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "932cba4c-a9e6-4063-827f-aac330a8ce17",
+      "phoneNumberName": "MKTG_CARSCOM_CRYL",
+      "phoneNumber": "+17798003317",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 106000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 106000,
+        "volume": 1,
+        "totalDuration": 106000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "93802a83-c487-434e-8735-d52670b184bf",
+      "phoneNumberName": "MKTG_GBP_CDJR_SERVICE",
+      "phoneNumber": "+19203066003",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 19000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 19000,
+        "volume": 1,
+        "totalDuration": 19000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "93ca7491-5c89-4545-827e-fd6d73033397",
+      "phoneNumberName": "MKTG_GOOGADS_STCH",
+      "phoneNumber": "+13312725138",
+      "dataValues": {
+        "inboundVolume": 19,
+        "inboundDuration": 3474000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 182842,
+        "volume": 19,
+        "totalDuration": 3474000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "944ee0f6-805c-451b-bde9-4c8e0318045b",
+      "phoneNumberName": "Columbus Chevy - Service Manager Office",
+      "phoneNumber": "+19206269091",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 309000,
+        "outboundVolume": 3,
+        "outboundDuration": 2580000,
+        "averageDuration": 722250,
+        "volume": 4,
+        "totalDuration": 2889000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "94ff130a-3972-43c3-a925-3bbb493c38cb",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728968",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 1,
+        "outboundDuration": 1947000,
+        "averageDuration": 1947000,
+        "volume": 1,
+        "totalDuration": 1947000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "95c3521e-5c58-4447-9fb7-be98e7416784",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728830",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 81000,
+        "outboundVolume": 8,
+        "outboundDuration": 673000,
+        "averageDuration": 94250,
+        "volume": 9,
+        "totalDuration": 754000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "99b9478e-0036-4be3-b0d4-0139d96d04c1",
+      "phoneNumberName": "John Lemke (Shared BDC)",
+      "phoneNumber": "+18726271128",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 1,
+        "outboundDuration": 0,
+        "averageDuration": 0,
+        "volume": 1,
+        "totalDuration": 0
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9b883b87-a8ee-4b95-b448-48ac8c681351",
+      "phoneNumberName": "MKTG_APPLEMAPS_STCH",
+      "phoneNumber": "+13312725141",
+      "dataValues": {
+        "inboundVolume": 12,
+        "inboundDuration": 3462000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 288500,
+        "volume": 12,
+        "totalDuration": 3462000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9bdc58a7-7ba0-4a54-80ce-2ecca3e210b2",
+      "phoneNumberName": "Columbus Ford - Used Car Manager",
+      "phoneNumber": "+19206596649",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 1,
+        "outboundDuration": 150000,
+        "averageDuration": 150000,
+        "volume": 1,
+        "totalDuration": 150000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9c27901c-c9b0-4bb6-b2f5-9670f2d34fd1",
+      "phoneNumberName": "MKTG_GBP_STCH_SALES",
+      "phoneNumber": "+16305242316",
+      "dataValues": {
+        "inboundVolume": 27,
+        "inboundDuration": 3362000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 129307,
+        "volume": 27,
+        "totalDuration": 3362000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9c70253b-657d-4e6b-a92a-7559110aae17",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+17799947574",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 5,
+        "outboundDuration": 715000,
+        "averageDuration": 143000,
+        "volume": 5,
+        "totalDuration": 715000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9da0a10c-8d40-494b-ba9e-117b241db2e6",
+      "phoneNumberName": "MKTG_GOOGADS_CHIG_GEN",
+      "phoneNumber": "+13127674258",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 693000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 231000,
+        "volume": 3,
+        "totalDuration": 693000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9e0d9113-d53c-4718-b459-9fd0b3a0adf7",
+      "phoneNumberName": "Beaver Dam GM - Melissa Hill",
+      "phoneNumber": "+19206314775",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 5,
+        "outboundDuration": 193000,
+        "averageDuration": 96500,
+        "volume": 5,
+        "totalDuration": 193000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9efe231b-2e57-4ef7-ba36-4dc7433858ff",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286878",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 50000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 25000,
+        "volume": 2,
+        "totalDuration": 50000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "9fe3099a-835e-4fad-ae04-2972d0dd6fe7",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286863",
+      "dataValues": {
+        "inboundVolume": 10,
+        "inboundDuration": 780000,
+        "outboundVolume": 15,
+        "outboundDuration": 2992000,
+        "averageDuration": 171454,
+        "volume": 25,
+        "totalDuration": 3772000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "a039403f-6f88-48ea-83ef-ecfab43e6f69",
+      "phoneNumberName": "MKTG_WDWL_BDGM",
+      "phoneNumber": "+19208852257",
+      "dataValues": {
+        "inboundVolume": 5,
+        "inboundDuration": 206000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 41200,
+        "volume": 5,
+        "totalDuration": 206000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "a35e603e-ecde-4676-ac6b-05e8669e1a18",
+      "phoneNumberName": "Hillary Fields (Shared BDC)",
+      "phoneNumber": "+13127613977",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 64000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 64000,
+        "volume": 1,
+        "totalDuration": 64000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "a4275143-3bc6-415f-847a-052ffcedbf02",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+17799947890",
+      "dataValues": {
+        "inboundVolume": 7,
+        "inboundDuration": 60000,
+        "outboundVolume": 9,
+        "outboundDuration": 1006000,
+        "averageDuration": 88833,
+        "volume": 16,
+        "totalDuration": 1066000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "a6208ae7-8031-4c92-9073-29d75cf3b4a2",
+      "phoneNumberName": "Columbus Ford - Finance (Columbus Ford Finance)",
+      "phoneNumber": "+19208901116",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 6,
+        "outboundDuration": 977000,
+        "averageDuration": 195400,
+        "volume": 6,
+        "totalDuration": 977000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "aa8e6343-ddee-4fd0-ba6e-4224534cb87d",
+      "phoneNumberName": "MKTG_GBP_CHIG_GEN_SALES",
+      "phoneNumber": "+13123867092",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 446000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 74333,
+        "volume": 6,
+        "totalDuration": 446000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "aae10681-ad46-4e92-abe4-54a19cecfc09",
+      "phoneNumberName": "MKTG_APPLEMAPS_COLC",
+      "phoneNumber": "+19203501150",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 95000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 95000,
+        "volume": 1,
+        "totalDuration": 95000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "abfb245d-a7d7-426d-ab5b-2b8a5a5cc9cc",
+      "phoneNumberName": "MKTG_CARGURUS_STCH",
+      "phoneNumber": "+13312722260",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 338000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 338000,
+        "volume": 2,
+        "totalDuration": 338000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "adba04fb-43ec-448e-81f7-36a3e655d8eb",
+      "phoneNumberName": "Napleton Chevrolet Chicago - Service BDC",
+      "phoneNumber": "+13125679498",
+      "dataValues": {
+        "inboundVolume": 73,
+        "inboundDuration": 16005000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 222291,
+        "volume": 73,
+        "totalDuration": 16005000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "aec8067e-cdf7-4a64-af7d-e6f49119b6ab",
+      "phoneNumberName": "MKTG_META_CHIG",
+      "phoneNumber": "+18722253737",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 32000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 32000,
+        "volume": 1,
+        "totalDuration": 32000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "afdb956c-969d-40a5-b6a8-472066f1ed6a",
+      "phoneNumberName": "Beaver Dam GM - Kyle Buss",
+      "phoneNumber": "+19209449548",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 806000,
+        "outboundVolume": 3,
+        "outboundDuration": 1000,
+        "averageDuration": 115285,
+        "volume": 9,
+        "totalDuration": 807000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "aff79c74-d5ac-4205-8065-15b7c8166b8c",
+      "phoneNumberName": "MKTG_GBP_CHIG_BG_SALES",
+      "phoneNumber": "+13123798530",
+      "dataValues": {
+        "inboundVolume": 16,
+        "inboundDuration": 4706000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 294125,
+        "volume": 16,
+        "totalDuration": 4706000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b09245cf-1807-4fe5-ad02-4e901e963537",
+      "phoneNumberName": "MKTG_CARFAX_CRYL",
+      "phoneNumber": "+17798006507",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 596000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 298000,
+        "volume": 2,
+        "totalDuration": 596000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b3989042-7a29-49d8-a633-91ce58302780",
+      "phoneNumberName": "Cassie Tertel (Shared BDC)",
+      "phoneNumber": "+18154778699",
+      "dataValues": {
+        "inboundVolume": 5,
+        "inboundDuration": 91000,
+        "outboundVolume": 93,
+        "outboundDuration": 2228000,
+        "averageDuration": 27282,
+        "volume": 98,
+        "totalDuration": 2319000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b3d2eee2-2726-4196-b502-c7baf835ca63",
+      "phoneNumberName": "Crystal Lake Service Direct #",
+      "phoneNumber": "+18152004389",
+      "dataValues": {
+        "inboundVolume": 22,
+        "inboundDuration": 7508000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 341272,
+        "volume": 22,
+        "totalDuration": 7508000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b3eae1bf-31a7-40c4-ba61-db98338a2cc9",
+      "phoneNumberName": "MKTG_DLRWEB_STCH_SERVICE",
+      "phoneNumber": "+16305242693",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 166000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 83000,
+        "volume": 2,
+        "totalDuration": 166000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b3fb3019-d472-46e3-b852-9d18724f32d8",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+18722312958",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 0,
+        "outboundVolume": 9,
+        "outboundDuration": 211000,
+        "averageDuration": 23444,
+        "volume": 10,
+        "totalDuration": 211000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b48d690d-0f92-4ee9-9fbf-4bfb17838706",
+      "phoneNumberName": "Alexandra Hartl (Shared BDC)",
+      "phoneNumber": "+19206301005",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 102000,
+        "outboundVolume": 18,
+        "outboundDuration": 282000,
+        "averageDuration": 34909,
+        "volume": 21,
+        "totalDuration": 384000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b574f749-b2eb-4196-8fb4-7236a96e8417",
+      "phoneNumberName": "Napleton Chevrolet Chicago (Main Native Phone Number)",
+      "phoneNumber": "+13122254300",
+      "dataValues": {
+        "inboundVolume": 105,
+        "inboundDuration": 20714000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 205089,
+        "volume": 105,
+        "totalDuration": 20714000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b704e226-d06b-48c0-aa1e-c406cc9eca3a",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16305849711",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 29000,
+        "outboundVolume": 12,
+        "outboundDuration": 874000,
+        "averageDuration": 69461,
+        "volume": 15,
+        "totalDuration": 903000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b7b33def-616e-49ee-8fb3-e1a6e88dff72",
+      "phoneNumberName": "Napleton Auto Group Main Number",
+      "phoneNumber": "+13123280904",
+      "dataValues": {
+        "inboundVolume": 135,
+        "inboundDuration": 29227000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 221416,
+        "volume": 135,
+        "totalDuration": 29227000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b967af5c-4f9e-4d91-9743-421d3e8c8566",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+18154779796",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 8000,
+        "outboundVolume": 1,
+        "outboundDuration": 20000,
+        "averageDuration": 14000,
+        "volume": 2,
+        "totalDuration": 28000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b976d57a-509f-4455-bfaf-2f9c57083b86",
+      "phoneNumberName": "MKTG_DLRWEB_CHIG_HYUN_SALES",
+      "phoneNumber": "+18722253755",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 743000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 371500,
+        "volume": 2,
+        "totalDuration": 743000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "bb273acf-4a0b-4e05-b5e1-98ac8b06d92f",
+      "phoneNumberName": "Columbus Ford - Erin  Schuster",
+      "phoneNumber": "+19206305984",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 1702000,
+        "outboundVolume": 17,
+        "outboundDuration": 1817000,
+        "averageDuration": 153000,
+        "volume": 23,
+        "totalDuration": 3519000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "bf1059d1-80cb-4c4d-8764-a69bccbadae8",
+      "phoneNumberName": "MKTG_INSTAGRAM_STCH",
+      "phoneNumber": "+13312227239",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 13000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 13000,
+        "volume": 1,
+        "totalDuration": 13000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "bf7064fd-055d-4cec-b575-ade1308c2765",
+      "phoneNumberName": "Beaver Dam CDJR",
+      "phoneNumber": "+19208878254",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 101000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 101000,
+        "volume": 1,
+        "totalDuration": 101000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "bfd7b75d-25b8-41ed-a1d6-8f60ceeaf2a1",
+      "phoneNumberName": "Columbus Chevy - Open Sales Office (Columbus Chevy Sales)",
+      "phoneNumber": "+19206269095",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 22000,
+        "outboundVolume": 3,
+        "outboundDuration": 1050000,
+        "averageDuration": 357333,
+        "volume": 4,
+        "totalDuration": 1072000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c26fe893-68b7-4577-9088-b8374d238c4c",
+      "phoneNumberName": "MKTG_VINQ_CHIG",
+      "phoneNumber": "+13125889421",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 308000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 308000,
+        "volume": 1,
+        "totalDuration": 308000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c354dbcd-5a7c-4646-b64b-d9fd2595eb11",
+      "phoneNumberName": "Crystal Lake Buick GMC - F&I2",
+      "phoneNumber": "+17799947570",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 30000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 30000,
+        "volume": 1,
+        "totalDuration": 30000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c49fae1f-dd9c-42fa-bde5-fa99abd17107",
+      "phoneNumberName": "St. Charles Chevrolet - Sales Representative",
+      "phoneNumber": "+16305492704",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 5,
+        "outboundDuration": 203000,
+        "averageDuration": 40600,
+        "volume": 5,
+        "totalDuration": 203000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c4a4f44b-7f32-468a-a8ec-53306cb586ae",
+      "phoneNumberName": "MKTG_CARSCOM_CHIG",
+      "phoneNumber": "+18722253777",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 768000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 256000,
+        "volume": 3,
+        "totalDuration": 768000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c53f24b0-d393-4e2e-bfe8-515f72826e4a",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+18125260069",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 11000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 11000,
+        "volume": 1,
+        "totalDuration": 11000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c54f522f-5192-4ac7-9d1f-5c79047fcacc",
+      "phoneNumberName": "St. Charles Chevrolet (Finance 2)",
+      "phoneNumber": "+16306728799",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 280000,
+        "outboundVolume": 5,
+        "outboundDuration": 753000,
+        "averageDuration": 129125,
+        "volume": 8,
+        "totalDuration": 1033000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c5834fc6-e6d5-48d9-901a-83805f7af7b3",
+      "phoneNumberName": "Laine Ozburn",
+      "phoneNumber": "+13124479157",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 0,
+        "outboundVolume": 1,
+        "outboundDuration": 78000,
+        "averageDuration": 78000,
+        "volume": 2,
+        "totalDuration": 78000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c60a398d-c11f-4c75-b0b5-4714346df56b",
+      "phoneNumberName": "Columbus Chevy - Seth Christianson (Columbus Chevy Service)",
+      "phoneNumber": "+19206235802",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 260000,
+        "outboundVolume": 8,
+        "outboundDuration": 724000,
+        "averageDuration": 140571,
+        "volume": 10,
+        "totalDuration": 984000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c6212334-df6a-40a0-8185-f6531caf2525",
+      "phoneNumberName": "MKTG_CARGURUS_BDGM",
+      "phoneNumber": "+19203198417",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 237000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 237000,
+        "volume": 1,
+        "totalDuration": 237000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c824617f-11e6-4880-a7cc-abec476c5792",
+      "phoneNumberName": "St. Charles Chevrolet Service Direct#",
+      "phoneNumber": "+16305849702",
+      "dataValues": {
+        "inboundVolume": 34,
+        "inboundDuration": 5981000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 175911,
+        "volume": 34,
+        "totalDuration": 5981000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c8fa4157-2556-49bc-9dfb-bb22adadd796",
+      "phoneNumberName": "Crystal Lake Parts Direct #",
+      "phoneNumber": "+18152494191",
+      "dataValues": {
+        "inboundVolume": 5,
+        "inboundDuration": 1589000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 317800,
+        "volume": 5,
+        "totalDuration": 1589000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cb730a73-7e16-4604-94c8-ccce1daa651f",
+      "phoneNumberName": "MKTG_GBP_COLC_SERVICE",
+      "phoneNumber": "+19202047868",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 48000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 16000,
+        "volume": 3,
+        "totalDuration": 48000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cb8aed75-0b53-4ec8-ab03-583a737f857e",
+      "phoneNumberName": "Beaver Dam CDJR - Manny Ramirez (CDJR Sales)",
+      "phoneNumber": "+19202127538",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 57000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 57000,
+        "volume": 1,
+        "totalDuration": 57000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cbc414c9-6bcc-4df6-ac2e-4cc9701fee00",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+18722312970",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 1,
+        "outboundDuration": 230000,
+        "averageDuration": 230000,
+        "volume": 1,
+        "totalDuration": 230000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "ccaae8d0-665e-48c9-a686-2d3b8adbb196",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+17799947893",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 3,
+        "outboundDuration": 0,
+        "averageDuration": 0,
+        "volume": 3,
+        "totalDuration": 0
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cd8b4d5d-e49b-4048-a1bf-ec5a0e82fa3d",
+      "phoneNumberName": "MKTG_DLRWEB_CHIG_ALL_MAIN",
+      "phoneNumber": "+13122257477",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 773000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 386500,
+        "volume": 2,
+        "totalDuration": 773000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cdd2d0c5-de58-4ea4-9a81-24e230de0169",
+      "phoneNumberName": "MKTG_OPEN_BDGM",
+      "phoneNumber": "+19208853301",
+      "dataValues": {
+        "inboundVolume": 47,
+        "inboundDuration": 6929000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 157477,
+        "volume": 47,
+        "totalDuration": 6929000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cdf9efdc-adb7-45a1-bbac-b6adb3301527",
+      "phoneNumberName": "MKTG_GOOGADS_COLC",
+      "phoneNumber": "+19203509498",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 181000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 181000,
+        "volume": 1,
+        "totalDuration": 181000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d419198c-a154-4390-92ac-2593d32e739d",
+      "phoneNumberName": "Columbus Chevrolet Epsilon",
+      "phoneNumber": "+19202047854",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 115000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 115000,
+        "volume": 1,
+        "totalDuration": 115000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d51114b8-50c6-4930-bdc6-ba72b7d6e2bc",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286856",
+      "dataValues": {
+        "inboundVolume": 21,
+        "inboundDuration": 1984000,
+        "outboundVolume": 16,
+        "outboundDuration": 1574000,
+        "averageDuration": 96162,
+        "volume": 37,
+        "totalDuration": 3558000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d5185e01-17e7-4d81-a93f-f2bed10c7703",
+      "phoneNumberName": "Beaver Dam GM - Maria Aragon",
+      "phoneNumber": "+19206314808",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 3,
+        "outboundDuration": 775000,
+        "averageDuration": 258333,
+        "volume": 3,
+        "totalDuration": 775000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d72002f7-2426-4764-80a8-6b92a6ffb21b",
+      "phoneNumberName": "Columbus Ford - Wyatt Jashinsky",
+      "phoneNumber": "+19206235961",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 5,
+        "outboundDuration": 708000,
+        "averageDuration": 141600,
+        "volume": 5,
+        "totalDuration": 708000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d9164a9f-37be-4d7b-b234-27b17f283b08",
+      "phoneNumberName": "MKTG_DLRWEB_CDJR_PARTS",
+      "phoneNumber": "+19205572978",
+      "dataValues": {
+        "inboundVolume": 4,
+        "inboundDuration": 121000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 30250,
+        "volume": 4,
+        "totalDuration": 121000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d9aecb65-ff2a-478c-bbc9-af0783771013",
+      "phoneNumberName": "Columbus Chevy - Dom Cirillo (Columbus Chevy Service)",
+      "phoneNumber": "+19206230102",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 886000,
+        "outboundVolume": 9,
+        "outboundDuration": 710000,
+        "averageDuration": 114000,
+        "volume": 15,
+        "totalDuration": 1596000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d9f530af-39a9-4403-8401-cc3fe6e847ae",
+      "phoneNumberName": "MKTG_APPLEMAPS_CHIG_HYUN",
+      "phoneNumber": "+13127674641",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 660000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 330000,
+        "volume": 2,
+        "totalDuration": 660000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "db39a0c2-ddb0-43c6-b6c6-349db1738687",
+      "phoneNumberName": "MKTG_APPLEMAPS_CRYL",
+      "phoneNumber": "+18155260069",
+      "dataValues": {
+        "inboundVolume": 10,
+        "inboundDuration": 1576000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 157600,
+        "volume": 10,
+        "totalDuration": 1576000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "db5b5f79-2644-4582-81bb-1beabb91991a",
+      "phoneNumberName": "Crystal Lake Buick GMC - Sales Person",
+      "phoneNumber": "+17799947891",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 237000,
+        "outboundVolume": 5,
+        "outboundDuration": 204000,
+        "averageDuration": 63000,
+        "volume": 8,
+        "totalDuration": 441000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "dc954bf4-71e8-4e4b-9f69-f0ff64151927",
+      "phoneNumberName": "DriveCentric Genius (St. Charles Chevy)",
+      "phoneNumber": "+16303206240",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 56000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 56000,
+        "volume": 1,
+        "totalDuration": 56000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "ddb60f65-7072-4f5f-a6ad-d0940abf94fc",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286785",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 35000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 11666,
+        "volume": 6,
+        "totalDuration": 35000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "e1e2dafe-1b3d-4a54-bd86-769ef2d002cb",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286873",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 84000,
+        "outboundVolume": 2,
+        "outboundDuration": 521000,
+        "averageDuration": 86428,
+        "volume": 8,
+        "totalDuration": 605000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "e46e02b3-3ab4-4e3d-9446-0003f6059a81",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+17799947575",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 31000,
+        "outboundVolume": 3,
+        "outboundDuration": 292000,
+        "averageDuration": 80750,
+        "volume": 5,
+        "totalDuration": 323000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "e4c21113-8e87-4b1d-9776-8f2d206a7e6d",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728778",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 4,
+        "outboundDuration": 385000,
+        "averageDuration": 96250,
+        "volume": 4,
+        "totalDuration": 385000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "e5924080-c6da-4daa-9c1e-eeb725fe86d8",
+      "phoneNumberName": "MKTG_AUTOTRADER_STCH",
+      "phoneNumber": "+13319010904",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 31000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 31000,
+        "volume": 1,
+        "totalDuration": 31000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "e5f40c6e-531e-4d64-8788-8cb49e817fa4",
+      "phoneNumberName": "St. Charles Chevrolet Main Phone#",
+      "phoneNumber": "+16305849700",
+      "dataValues": {
+        "inboundVolume": 41,
+        "inboundDuration": 6674000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 162780,
+        "volume": 41,
+        "totalDuration": 6674000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c354dbcd-5a7c-4646-b64b-d9fd2595eb11",
+      "phoneNumberName": "Crystal Lake Buick GMC - F&I2",
+      "phoneNumber": "+17799947570",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 30000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 30000,
+        "volume": 1,
+        "totalDuration": 30000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "926b65d7-eb09-4f35-8f38-958f5ca40466",
+      "phoneNumberName": "Columbus Ford - David Thatcher",
+      "phoneNumber": "+19206305983",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 429000,
+        "outboundVolume": 5,
+        "outboundDuration": 1053000,
+        "averageDuration": 185250,
+        "volume": 8,
+        "totalDuration": 1482000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cdd2d0c5-de58-4ea4-9a81-24e230de0169",
+      "phoneNumberName": "MKTG_OPEN_BDGM",
+      "phoneNumber": "+19208853301",
+      "dataValues": {
+        "inboundVolume": 47,
+        "inboundDuration": 6929000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 157477,
+        "volume": 47,
+        "totalDuration": 6929000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "0c310bce-fc38-4e55-ae54-5b10080ef1e4",
+      "phoneNumberName": "Oscar Villarruel (Shared BDC)",
+      "phoneNumber": "+13123280107",
+      "dataValues": {
+        "inboundVolume": 7,
+        "inboundDuration": 722000,
+        "outboundVolume": 69,
+        "outboundDuration": 2125000,
+        "averageDuration": 47450,
+        "volume": 76,
+        "totalDuration": 2847000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "346b73e8-f35c-4769-bbb2-2870e366fb1d",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+18722312969",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 3,
+        "outboundDuration": 71000,
+        "averageDuration": 23666,
+        "volume": 3,
+        "totalDuration": 71000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "44a01e89-b838-4e8e-86c7-c769f9e99653",
+      "phoneNumberName": "MKTG_CARGURUS_CRYL",
+      "phoneNumber": "+17798006519",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 1398000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 699000,
+        "volume": 2,
+        "totalDuration": 1398000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "95c3521e-5c58-4447-9fb7-be98e7416784",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728830",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 81000,
+        "outboundVolume": 8,
+        "outboundDuration": 673000,
+        "averageDuration": 94250,
+        "volume": 9,
+        "totalDuration": 754000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "ffda422e-25b5-4fb5-bc6b-81b9b6296adb",
+      "phoneNumberName": "Beaver Dam GM Finance Group#",
+      "phoneNumber": "+19206314892",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 505000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 252500,
+        "volume": 2,
+        "totalDuration": 505000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "776f5829-7190-4bdb-b125-91a8a9cb5e4a",
+      "phoneNumberName": "Beaver Dam GM - Jimmy Mateo",
+      "phoneNumber": "+19206314851",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 4,
+        "outboundDuration": 554000,
+        "averageDuration": 138500,
+        "volume": 4,
+        "totalDuration": 554000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "1e945e59-a6a3-4627-a828-d96f42fbc031",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728734",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 163000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 163000,
+        "volume": 2,
+        "totalDuration": 163000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "284a752e-10a2-414c-9d2e-cea6136b6c55",
+      "phoneNumberName": "Beaver Dam GM - Austin Walker",
+      "phoneNumber": "+19206314764",
+      "dataValues": {
+        "inboundVolume": 8,
+        "inboundDuration": 279000,
+        "outboundVolume": 12,
+        "outboundDuration": 890000,
+        "averageDuration": 64944,
+        "volume": 20,
+        "totalDuration": 1169000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "ccaae8d0-665e-48c9-a686-2d3b8adbb196",
+      "phoneNumberName": "Crystal Lake Buick GMC",
+      "phoneNumber": "+17799947893",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 3,
+        "outboundDuration": 0,
+        "averageDuration": 0,
+        "volume": 3,
+        "totalDuration": 0
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "89a81527-3d77-41e2-9b7e-6f713b039605",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+17738286846",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 2,
+        "outboundDuration": 411000,
+        "averageDuration": 411000,
+        "volume": 2,
+        "totalDuration": 411000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "d5185e01-17e7-4d81-a93f-f2bed10c7703",
+      "phoneNumberName": "Beaver Dam GM - Maria Aragon",
+      "phoneNumber": "+19206314808",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 3,
+        "outboundDuration": 775000,
+        "averageDuration": 258333,
+        "volume": 3,
+        "totalDuration": 775000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "b3d2eee2-2726-4196-b502-c7baf835ca63",
+      "phoneNumberName": "Crystal Lake Service Direct #",
+      "phoneNumber": "+18152004389",
+      "dataValues": {
+        "inboundVolume": 22,
+        "inboundDuration": 7508000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 341272,
+        "volume": 22,
+        "totalDuration": 7508000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "884c5419-1f8c-455a-9aa5-2e7c4c8c8cac",
+      "phoneNumberName": "Napleton Chevrolet Chicago Fax",
+      "phoneNumber": "+13122259121",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 40000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 40000,
+        "volume": 1,
+        "totalDuration": 40000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "1cda01fd-9fa7-4ef8-a024-61f9e91525dd",
+      "phoneNumberName": "Columbus Ford - Jon Huffman",
+      "phoneNumber": "+19206235968",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 1,
+        "outboundDuration": 207000,
+        "averageDuration": 207000,
+        "volume": 1,
+        "totalDuration": 207000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "35cbf93c-b499-4fc6-8568-6321040ee604",
+      "phoneNumberName": "Crystal Lake Buick GMC Fax",
+      "phoneNumber": "+18152194074",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 18000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 6000,
+        "volume": 3,
+        "totalDuration": 18000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "4f58210d-9b6e-4906-9fe3-7da074a797d4",
+      "phoneNumberName": "Napleton Chevrolet Chicago - Finance",
+      "phoneNumber": "+13123281164",
+      "dataValues": {
+        "inboundVolume": 8,
+        "inboundDuration": 710000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 88750,
+        "volume": 8,
+        "totalDuration": 710000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "bb273acf-4a0b-4e05-b5e1-98ac8b06d92f",
+      "phoneNumberName": "Columbus Ford - Erin  Schuster",
+      "phoneNumber": "+19206305984",
+      "dataValues": {
+        "inboundVolume": 6,
+        "inboundDuration": 1702000,
+        "outboundVolume": 17,
+        "outboundDuration": 1817000,
+        "averageDuration": 153000,
+        "volume": 23,
+        "totalDuration": 3519000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7f3d305e-9eba-41d5-bf75-1d298da1ccac",
+      "phoneNumberName": "Napleton Chevrolet Chicago",
+      "phoneNumber": "+18722312950",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 145000,
+        "outboundVolume": 1,
+        "outboundDuration": 107000,
+        "averageDuration": 63000,
+        "volume": 4,
+        "totalDuration": 252000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "3603555a-9efc-4c9b-ae56-ac4a1667c95f",
+      "phoneNumberName": "MKTG_GOOGADS_CHIG_CHEV",
+      "phoneNumber": "+13128014090",
+      "dataValues": {
+        "inboundVolume": 12,
+        "inboundDuration": 2401000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 200083,
+        "volume": 12,
+        "totalDuration": 2401000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "c54f522f-5192-4ac7-9d1f-5c79047fcacc",
+      "phoneNumberName": "St. Charles Chevrolet (Finance 2)",
+      "phoneNumber": "+16306728799",
+      "dataValues": {
+        "inboundVolume": 3,
+        "inboundDuration": 280000,
+        "outboundVolume": 5,
+        "outboundDuration": 753000,
+        "averageDuration": 129125,
+        "volume": 8,
+        "totalDuration": 1033000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "074446e0-e01a-4ecd-b3c2-071b501a41f9",
+      "phoneNumberName": "Beaver Dam CDJR - Dana LaSavage (CDJR Service)",
+      "phoneNumber": "+19202127530",
+      "dataValues": {
+        "inboundVolume": 5,
+        "inboundDuration": 257000,
+        "outboundVolume": 9,
+        "outboundDuration": 558000,
+        "averageDuration": 81500,
+        "volume": 14,
+        "totalDuration": 815000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "cd8b4d5d-e49b-4048-a1bf-ec5a0e82fa3d",
+      "phoneNumberName": "MKTG_DLRWEB_CHIG_ALL_MAIN",
+      "phoneNumber": "+13122257477",
+      "dataValues": {
+        "inboundVolume": 2,
+        "inboundDuration": 773000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 386500,
+        "volume": 2,
+        "totalDuration": 773000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "7fad3047-be6a-4fba-984b-8bfa85fa52f4",
+      "phoneNumberName": "MKTG_GOOGADS_CHIG_BG",
+      "phoneNumber": "+13122351469",
+      "dataValues": {
+        "inboundVolume": 13,
+        "inboundDuration": 2581000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 198538,
+        "volume": 13,
+        "totalDuration": 2581000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "5965d9cc-a0e4-4c76-a976-ffee89f90b09",
+      "phoneNumberName": "Engage - Mudd Advertising",
+      "phoneNumber": "+19206266080",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 354000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 354000,
+        "volume": 1,
+        "totalDuration": 354000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "e4c21113-8e87-4b1d-9776-8f2d206a7e6d",
+      "phoneNumberName": "St. Charles Chevrolet",
+      "phoneNumber": "+16306728778",
+      "dataValues": {
+        "inboundVolume": 0,
+        "inboundDuration": 0,
+        "outboundVolume": 4,
+        "outboundDuration": 385000,
+        "averageDuration": 96250,
+        "volume": 4,
+        "totalDuration": 385000
+      }
+    },
+    {
+      "alternativePhoneNumberNames": [],
+      "phoneNumberId": "bf1059d1-80cb-4c4d-8764-a69bccbadae8",
+      "phoneNumberName": "MKTG_INSTAGRAM_STCH",
+      "phoneNumber": "+13312227239",
+      "dataValues": {
+        "inboundVolume": 1,
+        "inboundDuration": 13000,
+        "outboundVolume": 0,
+        "outboundDuration": 0,
+        "averageDuration": 13000,
+        "volume": 1,
+        "totalDuration": 13000
+      }
+    }
+  ]
+}
