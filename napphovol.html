@@ -28,6 +28,11 @@
     <input type="text" id="organizationId" placeholder="Organization ID">
     <label for="accountKey">Account Key (optional)</label>
     <input type="text" id="accountKey" placeholder="Account Key">
+    <!-- new: start/end date inputs -->
+    <label for="startDate">Start Date</label>
+    <input type="date" id="startDate" value="">
+    <label for="endDate">End Date</label>
+    <input type="date" id="endDate" value="">
     <label for="phoneNumber">Phone Number</label>
     <select id="phoneNumber"></select>
     <div style="display:flex;gap:8px;">
@@ -288,19 +293,72 @@
     document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('pageDisplay').textContent = '1'; });
 
     // Quick client integration: load saved phone number activity JSON and render table/totals
+    const MAX_DAYS = parseInt((window.MAX_ACTIVITY_DAYS_OVERRIDE || '90'), 10) || 90; // client-side guard
+
+    function safeReadBody(resp) {
+      return resp.text().then(t => {
+        try { return JSON.stringify(JSON.parse(t), null, 2); } catch(e) { return t; }
+      });
+    }
+
+    function setLoading(isLoading) {
+      const btn = document.getElementById('loadActivityBtn');
+      if (btn) { btn.disabled = isLoading; btn.textContent = isLoading ? 'Loading...' : 'Load Phone Activity'; }
+      const dbg = document.getElementById('debugWindow');
+      if (dbg) dbg.textContent = isLoading ? 'Loading phone activity from server...' : '';
+    }
+
+    function showError(message) {
+      const target = document.getElementById('activityResults');
+      target.innerHTML = `<div class="alert">${escapeHtml(message)}</div>`;
+    }
+
     async function loadPhoneActivity() {
       const target = document.getElementById('activityResults');
-      target.innerHTML = '<div class="debug">Loading phone activity...</div>';
+      target.innerHTML = '';
+      const accountSel = document.getElementById('accountKeySelect');
+      const accountKeyToUse = accountSel ? accountSel.value : (document.getElementById('accountKey') ? document.getElementById('accountKey').value : '');
+      const organizationId = (document.getElementById('organizationId') || {}).value || '';
+      const start = (document.getElementById('startDate') || {}).value;
+      const end = (document.getElementById('endDate') || {}).value;
+
+      if (!accountKeyToUse) { showError('Missing accountKey. Select or enter an accountKey.'); return; }
+      if (!organizationId) { showError('Missing organizationId. Set organization ID in the input or select an account with org metadata.'); return; }
+      if (!start || !end) { showError('Please provide both start and end dates.'); return; }
+
+      const startDate = new Date(start + 'T00:00:00Z');
+      const endDate = new Date(end + 'T23:59:59Z');
+      if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || startDate > endDate) {
+        showError('Invalid start or end date');
+        return;
+      }
+      const msPerDay = 24 * 60 * 60 * 1000;
+      const days = Math.round((endDate - startDate) / msPerDay) + 1;
+      if (days > MAX_DAYS) { showError(`Date range too large: max ${MAX_DAYS} days`); return; }
+
+      setLoading(true);
       try {
-        const resp = await fetch('/phone_number_activity_2025-10-30.json');
-        if (!resp.ok) throw new Error('Failed to load JSON: ' + resp.status);
-        const data = await resp.json();
-        const items = data.items || [];
-        const totals = renderActivityTotals(items);
+        const params = new URLSearchParams({ accountKey: accountKeyToUse, organizationId, start, end });
+        const resp = await fetch('/phone-number-activity?' + params.toString());
+        if (!resp.ok) {
+          const body = await safeReadBody(resp);
+          showError(`Server error ${resp.status}: ${body}`);
+          return;
+        }
+        const payload = await resp.json();
+        const items = payload.items || [];
+        if (!Array.isArray(items) || items.length === 0) {
+          target.innerHTML = `<div class="debug">No activity found for account ${escapeHtml(accountKeyToUse)} in the selected date range.</div>`;
+          return;
+        }
+        renderActivityTotals(items);
         renderActivityTable(items);
         target.scrollIntoView({ behavior: 'smooth' });
       } catch (err) {
-        target.innerHTML = `<div class="alert">Error loading activity: ${escapeHtml(err.message)}</div>`;
+        const msg = err && err.message ? err.message : String(err);
+        showError('Error loading activity: ' + msg);
+      } finally {
+        setLoading(false);
       }
     }
 

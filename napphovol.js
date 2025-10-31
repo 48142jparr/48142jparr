@@ -29,6 +29,7 @@ function loadTokens() {
 // Load any existing tokens at startup
 ({ accessToken: latestAccessToken, refreshToken: latestRefreshToken } = loadTokens());
 let cachedAccountKey = process.env.ACCOUNTKEY || '';
+let cachedOrgId = process.env.ORGANIZATIONALID || '';
 
 // Initialize SQLite DB for persistent export of phone numbers
 const DB_PATH = path.join(__dirname, 'phone_numbers.db');
@@ -285,14 +286,23 @@ app.get('/api/latest-access-token', (req, res) => {
 // Expose useful env vars to the frontend
 app.get('/api/env-vars', (req, res) => {
   res.json({
-    organizationalId: process.env.ORGANIZATIONALID || '',
-    accountKey: process.env.ACCOUNTKEY || ''
+    organizationId: cachedOrgId || '',
+    accountKey: cachedAccountKey || process.env.ACCOUNTKEY || ''
   });
 });
 
-// Helper to get org ID from .env
+// Endpoint to set organizationId in memory (updates cached value)
+app.get('/api/set-organization', (req, res) => {
+  const org = req.query.organizationId || req.query.org || null;
+  if (!org) return res.status(400).json({ error: 'Missing organizationId parameter' });
+  cachedOrgId = org;
+  console.log('Cached organizationId set to', cachedOrgId);
+  res.json({ success: true, organizationId: cachedOrgId });
+});
+
+// Helper to get org ID from .env (now returns cached in-memory value)
 function getOrgId() {
-  return process.env.ORGANIZATIONALID;
+  return cachedOrgId;
 }
 
 // Endpoint to fetch and print all phone numbers and caller ID info from GoTo Admin API
@@ -732,12 +742,21 @@ async function fetchAccountKey(accessToken, organizationId) {
   return null;
 }
 
-// Endpoint to return organization ID and accountKey from .env only (static)
+// Endpoint to return organization ID and accountKey from memory/env
 app.get('/api/env-vars', (req, res) => {
   res.json({
-    organizationId: process.env.ORGANIZATIONALID || '',
-    accountKey: process.env.ACCOUNTKEY || ''
+    organizationId: cachedOrgId || '',
+    accountKey: cachedAccountKey || process.env.ACCOUNTKEY || ''
   });
+});
+
+// Endpoint to set organizationId in memory (updates cached value)
+app.get('/api/set-organization', (req, res) => {
+  const org = req.query.organizationId || req.query.org || null;
+  if (!org) return res.status(400).json({ error: 'Missing organizationId parameter' });
+  cachedOrgId = org;
+  console.log('Cached organizationId set to', cachedOrgId);
+  res.json({ success: true, organizationId: cachedOrgId });
 });
 
 // Endpoint to set accountKey in memory (for demo/testing)
@@ -1099,6 +1118,93 @@ setInterval(() => {
     console.warn(`Recent errors count: ${recentErrors.length}. Latest: ${recentErrors[0].ts} ${recentErrors[0].context} ${recentErrors[0].message}`);
   }
 }, 60 * 1000);
+
+// New endpoint: fetch phone number activity filtered to a specific accountKey and date range
+app.get('/phone-number-activity', async (req, res) => {
+  sanitizeQueryParams(req);
+  const accessToken = latestAccessToken;
+  if (!accessToken) return res.status(401).json({ error: 'No access token. Please authenticate first.' });
+
+  const accountKey = req.query.accountKey || req.query.account || '';
+  const start = req.query.start || req.query.startDate || null;
+  const end = req.query.end || req.query.endDate || null;
+  const organizationId = req.query.organizationId || getOrgId();
+
+  if (!accountKey) return res.status(400).json({ error: 'Missing required parameter: accountKey' });
+  if (!start || !end) return res.status(400).json({ error: 'Missing required parameter: start and end (YYYY-MM-DD)' });
+  if (!organizationId) return res.status(400).json({ error: 'Missing organizationId (set in .env or provide as query param)' });
+
+  // Parse and validate dates (simple YYYY-MM-DD check)
+  const startDate = new Date(start + 'T00:00:00Z');
+  const endDate = new Date(end + 'T23:59:59Z');
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || startDate > endDate) {
+    return res.status(400).json({ error: 'Invalid start or end date' });
+  }
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const days = Math.round((endDate - startDate) / msPerDay) + 1;
+  const MAX_DAYS = parseInt(process.env.MAX_ACTIVITY_DAYS || '90', 10);
+  if (days > MAX_DAYS) return res.status(400).json({ error: `Date range too large: max ${MAX_DAYS} days` });
+
+  try {
+    // Step 1: fetch phone numbers for the accountKey (voice-admin)
+    const numbersUrl = `https://api.goto.com/voice-admin/v1/phone-numbers`;
+    const numbers = await fetchAllFromUrl(numbersUrl, accessToken, { accountKey });
+    const phoneSet = new Set((numbers || []).map(n => (n.phoneNumber || n.number || '').toString()));
+
+    // Step 2: call Call Reports API and filter results
+    const callReportsUrl = 'https://api.goto.com/call-reports/v1/reports/phone-number-activity';
+    let page = 1;
+    const pageSize = 100;
+    const filtered = [];
+    let totalInbound = 0;
+    let totalOutbound = 0;
+    let totalDuration = 0;
+
+    const startTime = startDate.toISOString();
+    const endTime = endDate.toISOString();
+
+    while (true) {
+      const resp = await axios.get(callReportsUrl, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { organizationId, startTime, endTime, page, pageSize }
+      });
+      const items = resp.data.items || [];
+      for (const it of items) {
+        const pn = (it.phoneNumber || '').toString();
+        if (phoneSet.has(pn)) {
+          filtered.push(it);
+          // accumulate totals in known fields
+          const dv = it.dataValues || {};
+          totalInbound += (dv.inboundVolume || 0);
+          totalOutbound += (dv.outboundVolume || 0);
+          totalDuration += (dv.totalDuration || 0);
+        }
+      }
+      if (!items || items.length < pageSize) break;
+      page++;
+    }
+
+    const result = {
+      meta: { accountKey, organizationId, start, end, days, fetchedAt: new Date().toISOString() },
+      totals: { inbound: totalInbound, outbound: totalOutbound, totalDuration },
+      count: filtered.length,
+      items: filtered
+    };
+
+    // Optionally persist a copy for quick inspection if env allows
+    try {
+      if ((process.env.SAVE_ACTIVITY_JSON || 'true') === 'true') {
+        const fname = path.join(__dirname, `phone_number_activity_${start}.json`);
+        fs.writeFileSync(fname, JSON.stringify(result, null, 2));
+      }
+    } catch (e) { console.warn('Failed to save activity JSON:', e && e.message); }
+
+    res.json(result);
+  } catch (err) {
+    logAxiosError(err, '/phone-number-activity');
+    res.status(err.response?.status || 500).json({ error: err.message, details: err.response?.data });
+  }
+});
 
 app.listen(5000, () => {
   console.log("Visit http://localhost:5000/auth to start the OAuth flow.");
